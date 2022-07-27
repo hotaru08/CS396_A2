@@ -1,19 +1,6 @@
-/******************************************************************************
-filename:	Timer.h
-author:		Jolyn Wong Kaiyi, wong.k@digipen.edu
-Project:	CS396 Assignment 02
-
-Description:
-
-    Data regarding a delta timer.
-
-******************************************************************************/
 #pragma once
-
 struct Timer
 {
-    float m_value;
-
     constexpr static auto typedef_v = xecs::component::type::data
     {
         .m_pName = "Timer"
@@ -22,11 +9,12 @@ struct Timer
     xcore::err Serialize(xecs::serializer::stream& TextFile, bool) noexcept
     {
         TextFile.Field("Value", m_value).clear();
-        return { };
+        return{};
     }
+
+    float m_value;
 };
 
-// Serialization - Property
 property_begin(Timer)
 {
     property_var(m_value)

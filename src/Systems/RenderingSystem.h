@@ -5,7 +5,7 @@ Project:	CS396 Assignment 02
 
 Description:
 
-    Base rendering system that other renderers inherit from.
+    Base Rendering System that handles the buffer rendering.
 
 ******************************************************************************/
 #pragma once
@@ -24,11 +24,12 @@ struct RenderingSystem : xecs::system::instance
         .m_pName = "RenderingSystem"
     };
 
-    void OnPreUpdate(void) noexcept
+    void OnPreUpdate() noexcept
     {
         glClear(GL_COLOR_BUFFER_BIT);
         glDisable(GL_DEPTH_TEST);
-        glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+
 
         glViewport(0, 0, m_windowPtr->m_width, m_windowPtr->m_height);
         glMatrixMode(GL_PROJECTION);
@@ -38,14 +39,13 @@ struct RenderingSystem : xecs::system::instance
         glTranslatef(0, -m_windowPtr->m_height, 0);
     }
 
-    void OnPostUpdate(void) noexcept
+    void OnUpdate() noexcept
     {
-        glutSwapBuffers();
+        SendEventFrom<update>(this);
     }
 
-    void OnUpdate(void) noexcept
+    void OnPostUpdate() noexcept
     {
-        // Send an event to update all child updates that refers to this system
-        SendEventFrom<update>(this);
+        glutSwapBuffers();
     }
 };

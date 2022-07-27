@@ -18,21 +18,17 @@ Description:
 #include <iostream>
 #include <cstdint>
 
-//#define FREEGLUT_STATIC
-#include <GL\freeglut.h>
+#define GLUT_STATIC_LIB
+#include <GL\glut.h>
 
 // Misc ----------------------------------------------------------------------
-#include <Misc\Vector2D.h>
 #include <Misc\Inputs.h>
 #include <Misc\Window.h>
 
-// Components ----------------------------------------------------------------
-#include <Components\Timer.h>
-#include <Components\Position.h>
-#include <Components\Scale.h>
-#include <Components\Rotation.h>
-#include <Components\Velocity.h>
+// ECS ----------------------------------------------------------------------
+#include <Components\Components.h>
+#include <Systems\Systems.h>
 
-// Systems -------------------------------------------------------------------
-#include <Systems\RenderingSystem.h>
-#include <Systems\RenderTowerSystem.h>
+// Game ----------------------------------------------------------------------
+#include <Misc\Game.h>
+#include <Misc\Grid.h>
