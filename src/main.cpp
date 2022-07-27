@@ -8,6 +8,19 @@ static struct Game
     // ECS instance
     std::unique_ptr<xecs::game_mgr::instance> m_gameMgr;
 
+	void Initialize() noexcept
+	{
+		xcore::Init("TowerDefense");
+
+		m_gameMgr = std::make_unique< xecs::game_mgr::instance >();
+		RenderingSystem::m_windowPtr = &m_windowInst;
+	}
+
+	void CleanUp() noexcept
+	{
+		xcore::Kill();
+	}
+
 } sg_game;
 
 // ----------------------------------------------------------------------------
@@ -15,22 +28,43 @@ void RegisterElements()
 {
 	sg_game.m_gameMgr->RegisterComponents
 	<
-
+		  Position
+		, Rotation
+		, Scale
+		, Timer
+		, Velocity
 	>();
 
 	sg_game.m_gameMgr->RegisterSystems
 	<
-		RenderingSystem
+		  RenderingSystem
+		, RenderTowerSystem
 
 	>();
-}
 
-void Initialize(Window& _window)
-{
-    sg_game.m_gameMgr = std::make_unique< xecs::game_mgr::instance >();
-	RenderingSystem::m_windowPtr = &_window;
+    //
+        // Initialize global elements
+        //
+    std::srand(101);
 
-	RegisterElements();
+	sg_game.m_gameMgr->getOrCreateArchetype< Position, Velocity, Timer>()
+		.CreateEntities(1, [&](Position& position, Velocity& velocity, Timer& timer) noexcept
+		{
+				position.m_value = xcore::vector2
+				{
+					/*static_cast<float>(std::rand() % sg_game.m_windowInst.m_width),
+				    static_cast<float>(std::rand() % sg_game.m_windowInst.m_height)*/
+					100, 100
+				};
+
+				velocity.m_value.m_X = std::rand() / static_cast<float>(RAND_MAX) - 0.5f;
+				velocity.m_value.m_Y = std::rand() / static_cast<float>(RAND_MAX) - 0.5f;
+				velocity.m_value.Normalize();
+
+				timer.m_value = std::rand() / static_cast<float>(RAND_MAX) * 8;
+		}
+	);
+	
 }
 
 void RefreshUpdate(int value)
@@ -49,10 +83,8 @@ int main(int argc, char** argv)
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 
-    xcore::Init("TowerDefense");
-
-	sg_game.m_gameMgr = std::make_unique< xecs::game_mgr::instance >();
-	Initialize(sg_game.m_windowInst);
+	sg_game.Initialize();
+	RegisterElements();
 
 	// Setup Window Instance, Graphics and GameLoop
 	{
@@ -60,8 +92,7 @@ int main(int argc, char** argv)
 		glutInitWindowPosition(sg_game.m_windowInst.m_posX, sg_game.m_windowInst.m_posY);
 
 		glutInit(&argc, argv);
-		glutCreateWindow("CS396 Assignment 02");
-		glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
+		glutCreateWindow(xcore::get().m_pAppName);
 
 		glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
 		glutReshapeFunc
@@ -77,14 +108,6 @@ int main(int argc, char** argv)
 			[]()
 			{
 				sg_game.m_gameMgr->Run();
-
-				if (sg_game.m_windowInst.m_inputs.m_keys.getKey('s') || 
-					sg_game.m_windowInst.m_inputs.m_keys.getKey('x'))
-				{
-					
-					std::cout << "Help me" << std::endl;
-				}
-
 				sg_game.m_windowInst.m_inputs.m_keys.FrameUpdate();
 			}
 		);
@@ -117,5 +140,5 @@ int main(int argc, char** argv)
 		glutMainLoop();
 	}
 
-    xcore::Kill();
+	sg_game.CleanUp();
 }

@@ -19,7 +19,7 @@ Description:
 #include <cstdint>
 
 //#define FREEGLUT_STATIC
-#include "GL\freeglut.h"
+#include <GL\freeglut.h>
 
 // Misc ----------------------------------------------------------------------
 #include <Misc\Vector2D.h>
@@ -27,6 +27,7 @@ Description:
 #include <Misc\Window.h>
 
 // Components ----------------------------------------------------------------
+#include <Components\Timer.h>
 #include <Components\Position.h>
 #include <Components\Scale.h>
 #include <Components\Rotation.h>
@@ -34,3 +35,4 @@ Description:
 
 // Systems -------------------------------------------------------------------
 #include <Systems\RenderingSystem.h>
+#include <Systems\RenderTowerSystem.h>

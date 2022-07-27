@@ -1,33 +1,33 @@
 /******************************************************************************
-filename:	Scale.h
+filename:	Timer.h
 author:		Jolyn Wong Kaiyi, wong.k@digipen.edu
 Project:	CS396 Assignment 02
 
 Description:
 
-    Data regarding scale.
+    Data regarding a delta timer.
 
 ******************************************************************************/
 #pragma once
 
-struct Scale
+struct Timer
 {
-    xcore::vector2 m_value;
+    float m_value;
 
     constexpr static auto typedef_v = xecs::component::type::data
     {
-        .m_pName = "Scale"
+        .m_pName = "Timer"
     };
 
     xcore::err Serialize(xecs::serializer::stream& TextFile, bool) noexcept
     {
-        TextFile.Field("Value", m_value.m_X, m_value.m_Y).clear();
+        TextFile.Field("Value", m_value).clear();
         return { };
     }
 };
 
 // Serialization - Property
-property_begin(Scale)
+property_begin(Timer)
 {
     property_var(m_value)
 }

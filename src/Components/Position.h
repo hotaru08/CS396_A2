@@ -22,10 +22,11 @@ struct Position
     xcore::err Serialize(xecs::serializer::stream& TextFile, bool) noexcept
     {
         TextFile.Field("Value", m_value.m_X, m_value.m_Y).clear();
-        return{};
+        return { };
     }
 };
 
+// Serialization - Property
 property_begin(Position)
 {
     property_var(m_value)
