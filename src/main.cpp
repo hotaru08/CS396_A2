@@ -10,25 +10,7 @@ Description:
 ******************************************************************************/
 #include <includes.h>
 
-void InitializeGame() noexcept
-{
-    sg_game.m_gameMgr->getOrCreateArchetype< Position, Velocity, Timer >()
-        .CreateEntities(1, 
-            [&](Position& position, Velocity& velocity, Timer& timer) noexcept
-            {
-                position.m_value = xcore::vector2{ static_cast<float>(std::rand() % sg_game.m_windowInst.m_width)
-                                                     , static_cast<float>(std::rand() % sg_game.m_windowInst.m_height)
-                };
 
-                //Cell = grid::ComputeGridCellFromWorldPosition(Position.m_Value);
-
-                velocity.m_value.m_X = std::rand() / static_cast<float>(RAND_MAX) - 0.5f;
-                velocity.m_value.m_Y = std::rand() / static_cast<float>(RAND_MAX) - 0.5f;
-                velocity.m_value.Normalize();
-
-                timer.m_value = std::rand() / static_cast<float>(RAND_MAX) * 8;
-            });
-}
 
 void RefreshUpdate(int value) noexcept
 {
@@ -42,7 +24,7 @@ void RefreshUpdate(int value) noexcept
 int main(int argc, char** argv)
 {
     sg_game.Initialize();
-    InitializeGame();
+    sg_game.InitializeGame();
 
     {
         glutInitWindowSize(sg_game.m_windowInst.m_width, sg_game.m_windowInst.m_height);

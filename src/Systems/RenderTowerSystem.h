@@ -32,15 +32,13 @@ struct RenderTowerSystem : xecs::system::instance
         glEnd();
     }
 
-    __inline void operator()(const Position& _position, const Timer* _pTimer) const noexcept
+    void operator()(const Position& _position, const Scale& _scale) const noexcept
     {
-        constexpr auto Size = 3;
-
         glColor3f(0.5f, 1.0f, 0.5f);
 
-        glVertex2i(_position.m_value.m_X - Size, _position.m_value.m_Y - Size);
-        glVertex2i(_position.m_value.m_X - Size, _position.m_value.m_Y + Size);
-        glVertex2i(_position.m_value.m_X + Size, _position.m_value.m_Y + Size);
-        glVertex2i(_position.m_value.m_X + Size, _position.m_value.m_Y - Size);
+        glVertex2i(_position.m_value.m_X - _scale.m_value.m_X, _position.m_value.m_Y - _scale.m_value.m_Y);
+        glVertex2i(_position.m_value.m_X - _scale.m_value.m_X, _position.m_value.m_Y + _scale.m_value.m_Y);
+        glVertex2i(_position.m_value.m_X + _scale.m_value.m_X, _position.m_value.m_Y + _scale.m_value.m_Y);
+        glVertex2i(_position.m_value.m_X + _scale.m_value.m_X, _position.m_value.m_Y - _scale.m_value.m_Y);
     }
 };
