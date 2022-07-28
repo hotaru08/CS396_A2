@@ -10,7 +10,7 @@ Description:
 ******************************************************************************/
 #include <includes.h>
 
-
+static Game sg_game;
 
 void RefreshUpdate(int value) noexcept
 {

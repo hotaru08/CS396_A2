@@ -1,32 +1,16 @@
 #pragma once
 
-static struct Game
+struct Game
 {
-    Window m_windowInst;
-
-    std::unique_ptr<xecs::game_mgr::instance> m_gameMgr = nullptr;
-    
-
-    void Initialize() noexcept
+    void Initialize()
     {
         xcore::Init("TowerDefense");
 
         m_gameMgr = std::make_unique< xecs::game_mgr::instance >();
         RenderingSystem::m_windowPtr = &m_windowInst;
 
-        m_gameMgr->RegisterComponents
-        <
-            Position,
-            Scale,
-            Velocity,
-            Timer
-        >();
-
-        m_gameMgr->RegisterSystems
-        <
-            RenderingSystem,
-            RenderTowerSystem
-        >();
+        m_gameMgr->RegisterComponents< ALL_COMPONENTS >();
+        m_gameMgr->RegisterSystems< ALL_SYSTEMS >();
     }
 
     void InitializeGame() noexcept
@@ -44,8 +28,8 @@ static struct Game
 
                 position.m_value = xcore::vector2
                 {
-                    sg_game.m_windowInst.m_width  * 0.5f,
-                    sg_game.m_windowInst.m_height * 0.5f
+                    m_windowInst.m_width * 0.5f,
+                    m_windowInst.m_height * 0.5f
                 };
             }
         );
@@ -87,4 +71,6 @@ static struct Game
         xcore::Kill();
     }
 
-} sg_game;
+    Window m_windowInst;
+    std::unique_ptr<xecs::game_mgr::instance> m_gameMgr;
+};

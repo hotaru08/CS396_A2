@@ -1,4 +1,15 @@
+/******************************************************************************
+filename:	Timer.h
+author:		Jolyn Wong Kaiyi, wong.k@digipen.edu
+Project:	CS396 Assignment 02
+
+Description:
+
+    Data regarding a delta-time timer.
+
+******************************************************************************/
 #pragma once
+
 struct Timer
 {
     constexpr static auto typedef_v = xecs::component::type::data

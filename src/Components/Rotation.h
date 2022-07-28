@@ -1,5 +1,5 @@
 /******************************************************************************
-filename:	Velocity.h
+filename:	Rotation.h
 author:		Jolyn Wong Kaiyi, wong.k@digipen.edu
 Project:	CS396 Assignment 02
 
@@ -10,23 +10,23 @@ Description:
 ******************************************************************************/
 #pragma once
 
-struct Velocity
+struct Rotation
 {
     constexpr static auto typedef_v = xecs::component::type::data
     {
-        .m_pName = "Velocity"
+        .m_pName = "Rotation"
     };
 
     xcore::err Serialize(xecs::serializer::stream& TextFile, bool) noexcept
     {
-        TextFile.Field("Value", m_value.m_X, m_value.m_Y).clear();
-        return { };
+        TextFile.Field("Value", m_value).clear();
+        return{};
     }
 
-    xcore::vector2 m_value;
+    float m_value;
 };
 
-property_begin(Velocity)
+property_begin(Rotation)
 {
     property_var(m_value)
 }
