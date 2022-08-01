@@ -12,9 +12,10 @@ Description:
 
 struct RenderTowerSystem : xecs::system::instance
 {
-    constexpr static auto typedef_v = xecs::system::type::child_update<RenderingSystem, RenderingSystem::update>
+    constexpr static auto typedef_v = 
+    xecs::system::type::child_update<RenderingSystem, RenderingSystem::update>
     {
-        .m_pName = "RenderTowers"
+        .m_pName = "RenderTowersSystem"
     };
 
     //using query = std::tuple

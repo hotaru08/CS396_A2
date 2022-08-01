@@ -52,12 +52,14 @@ int main(int argc, char** argv)
         );
         glutTimerFunc(0, RefreshUpdate, 0);
 
-        glutKeyboardFunc([](unsigned char Key, int MouseX, int MouseY) noexcept
-        {
-            sg_game.m_windowInst.m_inputs.m_keys.setKeyState(Key, true);
-            sg_game.m_windowInst.m_inputs.m_mouseX = MouseX;
-            sg_game.m_windowInst.m_inputs.m_mouseY = MouseY;
-        });
+        glutKeyboardFunc(
+            [](unsigned char Key, int MouseX, int MouseY) noexcept
+            {
+                sg_game.m_windowInst.m_inputs.m_keys.setKeyState(Key, true);
+                sg_game.m_windowInst.m_inputs.m_mouseX = MouseX;
+                sg_game.m_windowInst.m_inputs.m_mouseY = MouseY;
+            }
+        );
         glutKeyboardUpFunc([](unsigned char Key, int MouseX, int MouseY) noexcept
         {
             sg_game.m_windowInst.m_inputs.m_keys.setKeyState(Key, false);

@@ -1,23 +1,37 @@
+/******************************************************************************
+filename:	GridCells.h
+author:		Jolyn Wong Kaiyi, wong.k@digipen.edu
+Project:	CS396 Assignment 02
+
+Description:
+
+    Data regarding grid cells that are used for spatial partitioning.
+
+******************************************************************************/
 #pragma once
 
-struct grid_cell
+struct GridCell
 {
-    xcore::err Serialize(xcore::textfile::stream& TextFile, bool, std::byte* pData) noexcept
-    {
-        xcore::err  Error;
-        auto& GridCell = *reinterpret_cast<grid_cell*>(pData);
-
-        (Error = TextFile.Field("X", GridCell.m_X))
-            || (Error = TextFile.Field("Y", GridCell.m_Y));
-        return Error;
-    }
-
     constexpr static auto typedef_v = xecs::component::type::share
     {
         .m_pName = "GridCell"
     ,   .m_bBuildFilter = true
     };
 
-    std::int16_t m_X;
-    std::int16_t m_Y;
+    xcore::err Serialize(xecs::serializer::stream& TextFile, bool) noexcept
+    {
+        TextFile.Field("X", m_X).clear();
+        TextFile.Field("Y", m_Y).clear();
+        return {};
+    }
+
+    std::int16_t m_X; // col of which cell to render
+    std::int16_t m_Y; // row of which cell to render
 };
+
+property_begin(GridCell)
+{
+    property_var(m_X).Flags(property::flags::SHOW_READONLY),
+    property_var(m_Y).Flags(property::flags::SHOW_READONLY)
+}
+property_end()

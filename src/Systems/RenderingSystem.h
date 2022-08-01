@@ -30,7 +30,7 @@ struct RenderingSystem : xecs::system::instance
         glDisable(GL_DEPTH_TEST);
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-
+        // Setup viewport for rendering
         glViewport(0, 0, m_windowPtr->m_width, m_windowPtr->m_height);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();

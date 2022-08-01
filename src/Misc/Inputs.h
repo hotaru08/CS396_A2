@@ -2,15 +2,14 @@
 
 struct Keys
 {
-    enum class KEY_TYPE : std::uint8_t
+    enum class KEY_STATE : std::uint8_t
     {
-        IS = (1 << 0)
-        , UP = (1 << 1)
-        , DOWN = (1 << 2)
+        HOLD        = (1 << 0), 
+        RELEASED    = (1 << 1),
+        TRIGGERED   = (1 << 2)
     };
 
-    using keys_array = std::array<std::uint8_t, 0xff + 1>;
-    keys_array         m_keys;
+    std::array<std::uint8_t, 0xff + 1> m_keys;
 
     void setKeyState(char x, bool OnOff) noexcept
     {
@@ -18,41 +17,41 @@ struct Keys
 
         if (OnOff)
         {
-            if (!(key & static_cast<std::uint8_t>(KEY_TYPE::IS)))
+            if (!(key & static_cast<std::uint8_t>(KEY_STATE::HOLD)))
             {
-                key |= (static_cast<std::uint8_t>(KEY_TYPE::IS) | static_cast<std::uint8_t>(KEY_TYPE::DOWN));
+                key |= (static_cast<std::uint8_t>(KEY_STATE::HOLD) | static_cast<std::uint8_t>(KEY_STATE::TRIGGERED));
             }
         }
         else
         {
-            if (key & static_cast<std::uint8_t>(KEY_TYPE::IS))
+            if (key & static_cast<std::uint8_t>(KEY_STATE::HOLD))
             {
-                key &= ~(static_cast<std::uint8_t>(KEY_TYPE::IS) | static_cast<std::uint8_t>(KEY_TYPE::DOWN));
-                key |= static_cast<std::uint8_t>(KEY_TYPE::UP);
+                key &= ~(static_cast<std::uint8_t>(KEY_STATE::HOLD) | static_cast<std::uint8_t>(KEY_STATE::TRIGGERED));
+                key |= static_cast<std::uint8_t>(KEY_STATE::RELEASED);
             }
         }
     }
 
     bool getKeyUp(char x) noexcept
     {
-        return (m_keys[static_cast<std::uint8_t>(x)] & static_cast<std::uint8_t>(KEY_TYPE::UP));
+        return (m_keys[static_cast<std::uint8_t>(x)] & static_cast<std::uint8_t>(KEY_STATE::RELEASED));
     }
 
     bool getKeyDown(char x) noexcept
     {
-        return (m_keys[static_cast<std::uint8_t>(x)] & static_cast<std::uint8_t>(KEY_TYPE::DOWN));
+        return (m_keys[static_cast<std::uint8_t>(x)] & static_cast<std::uint8_t>(KEY_STATE::TRIGGERED));
     }
 
     bool getKey(char x) noexcept
     {
-        return (m_keys[static_cast<std::uint8_t>(x)] & static_cast<std::uint8_t>(KEY_TYPE::IS));
+        return (m_keys[static_cast<std::uint8_t>(x)] & static_cast<std::uint8_t>(KEY_STATE::HOLD));
     }
 
     void Poll() noexcept
     {
         for (auto& K : m_keys)
         {
-            K = K & (~(static_cast<std::uint8_t>(KEY_TYPE::UP) | static_cast<std::uint8_t>(KEY_TYPE::DOWN)));
+            K = K & (~(static_cast<std::uint8_t>(KEY_STATE::RELEASED) | static_cast<std::uint8_t>(KEY_STATE::TRIGGERED)));
         }
     }
 };

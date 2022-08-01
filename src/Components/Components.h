@@ -10,4 +10,5 @@
 #define ALL_COMPONENTS \
     Position, Scale, Rotation, \
     Velocity, \
-    Timer
+    Timer, \
+    GridCell

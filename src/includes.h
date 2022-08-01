@@ -17,6 +17,7 @@ Description:
 #include <bitset>
 #include <iostream>
 #include <cstdint>
+#include <tuple>
 
 #define GLUT_STATIC_LIB
 #include <GL\glut.h>
@@ -26,9 +27,16 @@ Description:
 #include <Misc\Window.h>
 
 // ECS ----------------------------------------------------------------------
+#include <Events\OnKeyHold.h>
+#include <Events\OnKeyDown.h>
+#include <Events\OnKeyUp.h>
+
 #include <Components\Components.h>
+
+#include <Tags\PlayerTag.h>
+
+#include <Misc\Grid.h>
 #include <Systems\Systems.h>
 
 // Game ----------------------------------------------------------------------
 #include <Misc\Game.h>
-#include <Misc\Grid.h>
