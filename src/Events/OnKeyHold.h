@@ -1,19 +1,19 @@
 /******************************************************************************
-filename:	PlayerTag.h
+filename:	OnKeyhold.h
 author:		Jolyn Wong Kaiyi, wong.k@digipen.edu
 Project:	CS396 Assignment 02
 
 Description:
 
-    Defines a tag for identifying a player.
+    Defines an event that is published when a key is on hold.
 
 ******************************************************************************/
 #pragma once
 
-//struct PlayerTag
-//{
-//    constexpr static auto typedef_v = xecs::component::type::tag
-//    {
-//        .m_pName = "Player"
-//    };
-//};
+struct OnKeyHold : xecs::event::instance<const unsigned char>
+{
+    constexpr static auto typedef_v = xecs::event::type::global
+    {
+        .m_pName = "OnKeyHold"
+    };
+};

@@ -5,15 +5,15 @@ Project:	CS396 Assignment 02
 
 Description:
 
-    Event that signals that a key is held down.
+    Defines an event that is published when a key is down.
 
 ******************************************************************************/
 #pragma once
 
-//struct OnKeyDown 
-//{
-//    constexpr static auto typedef_v = xecs::component::type::tag
-//    {
-//        .m_pName = "OnKeyDown"
-//    };
-//};
+struct OnKeyDown : xecs::event::instance<const unsigned char>
+{
+    constexpr static auto typedef_v = xecs::event::type::global
+    {
+        .m_pName = "OnKeyDown"
+    };
+};

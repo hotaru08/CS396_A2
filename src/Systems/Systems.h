@@ -1,8 +1,12 @@
 #pragma once
 
-#include <Systems\RenderingSystem.h>
+#include <Systems\EventSystems\PlayerInputs_OnKeyHold.h>
+
+#include <Systems\RenderCameraSystem.h>
 #include <Systems\RenderTowerSystem.h>
+#include <Systems\RenderPlayerSystem.h>
 #include <Systems\RenderSpatialGridSystem.h>
 
 #define ALL_SYSTEMS \
-    RenderingSystem, RenderSpatialGridSystem, RenderTowerSystem
+    PlayerInputs_OnKeyHold, \
+    RenderCameraSystem, RenderSpatialGridSystem, RenderPlayerSystem, RenderTowerSystem

@@ -18,22 +18,19 @@ Description:
 #include <iostream>
 #include <cstdint>
 #include <tuple>
+#include <cmath>
 
 #define GLUT_STATIC_LIB
 #include <GL\glut.h>
 
 // Misc ----------------------------------------------------------------------
 #include <Misc\Inputs.h>
+#include <Misc\Text.h>
 #include <Misc\Window.h>
 
 // ECS ----------------------------------------------------------------------
-#include <Events\OnKeyHold.h>
-#include <Events\OnKeyDown.h>
-#include <Events\OnKeyUp.h>
-
+#include <Events\Events.h>
 #include <Components\Components.h>
-
-#include <Tags\PlayerTag.h>
 
 #include <Misc\Grid.h>
 #include <Systems\Systems.h>

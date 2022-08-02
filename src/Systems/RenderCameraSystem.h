@@ -1,5 +1,5 @@
 /******************************************************************************
-filename:	RenderingSystem.h
+filename:	RenderCameraSystem.h
 author:		Jolyn Wong Kaiyi, wong.k@digipen.edu
 Project:	CS396 Assignment 02
 
@@ -10,7 +10,7 @@ Description:
 ******************************************************************************/
 #pragma once
 
-struct RenderingSystem : xecs::system::instance
+struct RenderCameraSystem : xecs::system::instance
 {
     // Aliases
     using update = xecs::event::instance<>;
@@ -21,17 +21,18 @@ struct RenderingSystem : xecs::system::instance
 
     constexpr static auto typedef_v = xecs::system::type::update
     {
-        .m_pName = "RenderingSystem"
+        .m_pName = "RenderCameraSystem"
     };
 
     void OnPreUpdate() noexcept
     {
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDisable(GL_DEPTH_TEST);
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-        // Setup viewport for rendering
+        // Setup viewport for rendering camera
         glViewport(0, 0, m_windowPtr->m_width, m_windowPtr->m_height);
+
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         glOrtho(0, m_windowPtr->m_width, 0, m_windowPtr->m_height, -1, 1);

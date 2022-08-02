@@ -10,3 +10,8 @@ Description:
 ******************************************************************************/
 #pragma once
 
+namespace Text
+{
+    template < typename... TArgs >
+    void PrintText(const int _x, const int _y, const char* const _str, TArgs&&... _args) noexcept;
+}

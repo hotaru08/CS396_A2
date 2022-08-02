@@ -10,8 +10,6 @@ Description:
 ******************************************************************************/
 #include <includes.h>
 
-static Game sg_game;
-
 void RefreshUpdate(int value) noexcept
 {
     // Post re-paint request to activate display()
@@ -52,30 +50,42 @@ int main(int argc, char** argv)
         );
         glutTimerFunc(0, RefreshUpdate, 0);
 
-        glutKeyboardFunc(
+        // Poll for key and mouse inputs
+        glutKeyboardFunc
+        (
             [](unsigned char Key, int MouseX, int MouseY) noexcept
             {
-                sg_game.m_windowInst.m_inputs.m_keys.setKeyState(Key, true);
+                sg_game.m_windowInst.m_inputs.m_keys.SetKeyState(Key, true);
+                sg_game.m_gameMgr->SendGlobalEvent< OnKeyDown >(Key);
+
                 sg_game.m_windowInst.m_inputs.m_mouseX = MouseX;
                 sg_game.m_windowInst.m_inputs.m_mouseY = MouseY;
             }
         );
-        glutKeyboardUpFunc([](unsigned char Key, int MouseX, int MouseY) noexcept
-        {
-            sg_game.m_windowInst.m_inputs.m_keys.setKeyState(Key, false);
-            sg_game.m_windowInst.m_inputs.m_mouseX = MouseX;
-            sg_game.m_windowInst.m_inputs.m_mouseY = MouseY;
-        });
-        glutMouseFunc([](int Button, int State, int MouseX, int MouseY) noexcept
-        {
-            sg_game.m_windowInst.m_inputs.m_mouseX = MouseX;
-            sg_game.m_windowInst.m_inputs.m_mouseY = MouseY;
+        glutKeyboardUpFunc
+        (
+            [](unsigned char Key, int MouseX, int MouseY) noexcept
+            {
+                sg_game.m_windowInst.m_inputs.m_keys.SetKeyState(Key, false);
+                //sg_game.m_gameMgr->SendGlobalEvent< OnKeyUp >(Key);
 
-            if (Button == GLUT_LEFT_BUTTON)
-                sg_game.m_windowInst.m_inputs.m_mouseLeftBtn = (State == GLUT_DOWN);
-            else if (Button == GLUT_RIGHT_BUTTON)
-                sg_game.m_windowInst.m_inputs.m_mouseRightBtn = (State == GLUT_DOWN);
-        });
+                sg_game.m_windowInst.m_inputs.m_mouseX = MouseX;
+                sg_game.m_windowInst.m_inputs.m_mouseY = MouseY;
+            }
+        );
+        glutMouseFunc
+        (
+            [](int Button, int State, int MouseX, int MouseY) noexcept
+            {
+                sg_game.m_windowInst.m_inputs.m_mouseX = MouseX;
+                sg_game.m_windowInst.m_inputs.m_mouseY = MouseY;
+
+                if (Button == GLUT_LEFT_BUTTON)
+                    sg_game.m_windowInst.m_inputs.m_mouseLeftBtn = (State == GLUT_DOWN);
+                else if (Button == GLUT_RIGHT_BUTTON)
+                    sg_game.m_windowInst.m_inputs.m_mouseRightBtn = (State == GLUT_DOWN);
+            }
+        );
 
         glutMainLoop();
     }

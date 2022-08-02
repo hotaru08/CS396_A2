@@ -1,19 +1,18 @@
 /******************************************************************************
-filename:	PlayerTag.h
+filename:	Events.h
 author:		Jolyn Wong Kaiyi, wong.k@digipen.edu
 Project:	CS396 Assignment 02
 
 Description:
 
-    Defines a tag for identifying a player.
+    Header including other event files.
 
 ******************************************************************************/
 #pragma once
 
-struct PlayerTag
-{
-    constexpr static auto typedef_v = xecs::component::type::tag
-    {
-        .m_pName = "Player"
-    };
-};
+#include <Events\OnKeyUp.h>
+#include <Events\OnKeyHold.h>
+#include <Events\OnKeyDown.h>
+
+#define ALL_EVENTS \
+    OnKeyUp, OnKeyHold, OnKeyDown

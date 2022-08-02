@@ -7,8 +7,11 @@
 #include <Components\GridCells.h>
 #include <Components\Timer.h>
 
+#include <Components\Player.h>
+
 #define ALL_COMPONENTS \
     Position, Scale, Rotation, \
     Velocity, \
     Timer, \
-    GridCell
+    GridCell, \
+    Player
