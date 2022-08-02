@@ -65,15 +65,17 @@ struct Game
 
         // Create Player Prefab
         m_prefabGUIDs[PREFAB_TYPES::PLAYER] =
-        m_gameMgr->CreatePrefab<Position, Scale, Rotation, GridCell, Player>
+        m_gameMgr->CreatePrefab<Position, Scale, Rotation, GridCell, Player, Velocity>
         (
-            [&](Position& _position, Scale& _scale, Rotation& _rotation, GridCell& _cell, Player& _player) noexcept
+            [&](Position& _position, Scale& _scale, Rotation& _rotation, GridCell& _cell, Player& _player, Velocity& _velocity) noexcept
             {
                 _position.m_value       = xcore::vector2{ 0.0f, 0.0f };
                 _scale.m_value          = xcore::vector2{ 1.0f, 1.0f };
                 _scale.m_value          = 0.0f;
                 _cell.m_X = _cell.m_Y   = 0;
-                //_player.m_moveStates.reset();
+
+                _player.m_moveStates.reset();
+                _velocity.m_value = xcore::vector2{ 0.0f, 0.0f };
             }
         );
     }
@@ -96,7 +98,7 @@ struct Game
         m_gameMgr->CreatePrefabInstance
         (
             1, m_prefabGUIDs[PREFAB_TYPES::PLAYER],
-            [&](Position& _position, Scale& _scale, Rotation& _rotation, GridCell& _cell) noexcept
+            [&](Position& _position, Scale& _scale, GridCell& _cell) noexcept
             {
                 _scale.m_value      = xcore::vector2{ 30.0f, 30.0f };
                 _position.m_value   = xcore::vector2{ m_windowInst.m_width * 0.5f, m_windowInst.m_height * 0.5f - 100.0f };

@@ -67,7 +67,7 @@ int main(int argc, char** argv)
             [](unsigned char Key, int MouseX, int MouseY) noexcept
             {
                 sg_game.m_windowInst.m_inputs.m_keys.SetKeyState(Key, false);
-                //sg_game.m_gameMgr->SendGlobalEvent< OnKeyUp >(Key);
+                sg_game.m_gameMgr->SendGlobalEvent< OnKeyUp >(Key);
 
                 sg_game.m_windowInst.m_inputs.m_mouseX = MouseX;
                 sg_game.m_windowInst.m_inputs.m_mouseY = MouseY;

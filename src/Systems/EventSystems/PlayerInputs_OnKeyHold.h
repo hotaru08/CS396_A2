@@ -18,12 +18,7 @@ struct PlayerInputs_OnKeyHold : xecs::system::instance
         .m_pName = "PlayerInputs_OnKeyDown"
     };
 
-    using query = std::tuple
-    < 
-        xecs::query::must< Player >
-    >;
-
-    void OnStart()
+    void OnGameStart()
     {
         m_playerInputQuery.m_Must.AddFromComponents< Player >();
     }
@@ -31,32 +26,59 @@ struct PlayerInputs_OnKeyHold : xecs::system::instance
     void OnEvent(const unsigned char _key) noexcept
     {
         // Seach for entities with Player component to update movement state
-        std::cout << "listened to key down event ... updating event" << std::endl;
         Foreach
         (
             Search(m_playerInputQuery),
             [&](Player& _player)
             {
+                _player.m_moveStates.reset();
+
                 // Update 
                 switch (_key)
                 {
                 case 'w':
-                    std::cout << "Triggered W" << std::endl;
                     _player.m_moveStates[static_cast<std::uint8_t>(Player::MOVE_STATE::UP)] = true;
                     break;
                 case 's':
-                    std::cout << "Triggered S" << std::endl;
                     _player.m_moveStates[static_cast<std::uint8_t>(Player::MOVE_STATE::DOWN)] = true;
                     break;
                 case 'a':
-                    std::cout << "Triggered A" << std::endl;
                     _player.m_moveStates[static_cast<std::uint8_t>(Player::MOVE_STATE::LEFT)] = true;
                     break;
                 case 'd':
-                    std::cout << "Triggered D" << std::endl;
                     _player.m_moveStates[static_cast<std::uint8_t>(Player::MOVE_STATE::RIGHT)] = true;
                     break;
                 }
+            }
+        );
+    }
+
+    xecs::query::instance m_playerInputQuery;
+};
+
+struct PlayerInputs_OnKeyUp : xecs::system::instance
+{
+    constexpr static auto typedef_v =
+    xecs::system::type::global_event< OnKeyUp >
+    {
+        .m_pName = "PlayerInputs_OnKeyUp"
+    };
+
+    void OnGameStart()
+    {
+        m_playerInputQuery.m_Must.AddFromComponents< Player >();
+    }
+
+    void OnEvent(const unsigned char _key) noexcept
+    {
+        // Seach for entities with Player component to update movement state
+        Foreach
+        (
+            Search(m_playerInputQuery),
+            [&](Player& _player)
+            {
+                _player.m_moveStates.reset();
+                _player.m_moveStates[static_cast<std::uint8_t>(Player::MOVE_STATE::NONE)] = true;
             }
         );
     }
