@@ -17,34 +17,8 @@ struct PlayerUpdateLogicSystem : xecs::system::instance
         .m_pName = "PlayerUpdateLogicSystem"
     };
 
-    //void OnGameStart()
-    //{
-    //    m_playerInputQuery.m_Must.AddFromComponents< Player >();
-    //}
-
-    void operator()(Player& _player, Velocity& _velocity, Position& _position)
+    void operator()(Velocity& _velocity, Position& _position)
     {
-        if (_player.m_moveStates[static_cast<std::uint8_t>(Player::MOVE_STATE::UP)])
-        {
-            _velocity.m_value.m_Y = -10.0f;
-        }
-        else if (_player.m_moveStates[static_cast<std::uint8_t>(Player::MOVE_STATE::DOWN)])
-        {
-            _velocity.m_value.m_Y = 10.0f;
-        }
-        else if (_player.m_moveStates[static_cast<std::uint8_t>(Player::MOVE_STATE::LEFT)])
-        {
-            _velocity.m_value.m_X = -10.0f;
-        }
-        else if (_player.m_moveStates[static_cast<std::uint8_t>(Player::MOVE_STATE::RIGHT)])
-        {
-            _velocity.m_value.m_X = 10.0f;
-        }
-        else if (_player.m_moveStates[static_cast<std::uint8_t>(Player::MOVE_STATE::NONE)])
-        {
-            _velocity.m_value = xcore::vector2{ 0.0f, 0.0f };
-        }
-
         _position.m_value += _velocity.m_value;
     }
 

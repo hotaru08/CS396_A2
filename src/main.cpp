@@ -51,6 +51,7 @@ int main(int argc, char** argv)
         glutTimerFunc(0, RefreshUpdate, 0);
 
         // Poll for key and mouse inputs
+        glutIgnoreKeyRepeat(false);
         glutKeyboardFunc
         (
             [](unsigned char Key, int MouseX, int MouseY) noexcept

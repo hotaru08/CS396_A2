@@ -29,24 +29,23 @@ struct PlayerInputs_OnKeyHold : xecs::system::instance
         Foreach
         (
             Search(m_playerInputQuery),
-            [&](Player& _player)
+            [&](Velocity& _velocity)
             {
-                _player.m_moveStates.reset();
 
                 // Update 
                 switch (_key)
                 {
                 case 'w':
-                    _player.m_moveStates[static_cast<std::uint8_t>(Player::MOVE_STATE::UP)] = true;
+                    _velocity.m_value.m_Y = -1.0f;
                     break;
                 case 's':
-                    _player.m_moveStates[static_cast<std::uint8_t>(Player::MOVE_STATE::DOWN)] = true;
+                    _velocity.m_value.m_Y = 1.0f;
                     break;
                 case 'a':
-                    _player.m_moveStates[static_cast<std::uint8_t>(Player::MOVE_STATE::LEFT)] = true;
+                    _velocity.m_value.m_X = -1.0f;
                     break;
                 case 'd':
-                    _player.m_moveStates[static_cast<std::uint8_t>(Player::MOVE_STATE::RIGHT)] = true;
+                    _velocity.m_value.m_X = 1.0f;
                     break;
                 }
             }
@@ -75,10 +74,19 @@ struct PlayerInputs_OnKeyUp : xecs::system::instance
         Foreach
         (
             Search(m_playerInputQuery),
-            [&](Player& _player)
+            [&](Velocity& _velocity)
             {
-                _player.m_moveStates.reset();
-                _player.m_moveStates[static_cast<std::uint8_t>(Player::MOVE_STATE::NONE)] = true;
+                switch (_key)
+                {
+                case 'w':
+                case 's':
+                    _velocity.m_value.m_Y = 0.0f;
+                    break;
+                case 'a':
+                case 'd':
+                    _velocity.m_value.m_X = 0.0f;
+                    break;
+                }
             }
         );
     }

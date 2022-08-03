@@ -67,14 +67,13 @@ struct Game
         m_prefabGUIDs[PREFAB_TYPES::PLAYER] =
         m_gameMgr->CreatePrefab<Position, Scale, Rotation, GridCell, Player, Velocity>
         (
-            [&](Position& _position, Scale& _scale, Rotation& _rotation, GridCell& _cell, Player& _player, Velocity& _velocity) noexcept
+            [&](Position& _position, Scale& _scale, Rotation& _rotation, GridCell& _cell, Velocity& _velocity) noexcept
             {
                 _position.m_value       = xcore::vector2{ 0.0f, 0.0f };
                 _scale.m_value          = xcore::vector2{ 1.0f, 1.0f };
                 _scale.m_value          = 0.0f;
                 _cell.m_X = _cell.m_Y   = 0;
 
-                _player.m_moveStates.reset();
                 _velocity.m_value = xcore::vector2{ 0.0f, 0.0f };
             }
         );
