@@ -29,22 +29,22 @@ struct PlayerInputs_OnKeyDown : xecs::system::instance
         Foreach
         (
             Search(m_playerInputQuery),
-            [&](Direction& _direction)
+            [&](Velocity& _velocity)
             {
                 // Update 
                 switch (_key)
                 {
                 case 'w':
-                    _direction.m_value.m_Y = -1.0f;
+                    _velocity.m_value.m_Y = -5.0f;
                     break;
                 case 's':
-                    _direction.m_value.m_Y = 1.0f;
+                    _velocity.m_value.m_Y = 5.0f;
                     break;
                 case 'a':
-                    _direction.m_value.m_X = -1.0f;
+                    _velocity.m_value.m_X = -5.0f;
                     break;
                 case 'd':
-                    _direction.m_value.m_X = 1.0f;
+                    _velocity.m_value.m_X = 5.0f;
                     break;
 
                 case '~': // Set to render debug info
@@ -77,17 +77,17 @@ struct PlayerInputs_OnKeyUp : xecs::system::instance
         Foreach
         (
             Search(m_playerInputQuery),
-            [&](Direction& _direction)
+            [&](Velocity& _velocity)
             {
                 switch (_key)
                 {
                 case 'w':
                 case 's':
-                    _direction.m_value.m_Y = 0.0f;
+                    _velocity.m_value.m_Y = 0.0f;
                     break;
                 case 'a':
                 case 'd':
-                    _direction.m_value.m_X = 0.0f;
+                    _velocity.m_value.m_X = 0.0f;
                     break;
                 }
             }

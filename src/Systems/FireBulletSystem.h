@@ -12,21 +12,19 @@ Description:
 
 struct FireBulletSystem : xecs::system::instance
 {
-    constexpr static auto typedef_v =
-    xecs::system::type::update
+    constexpr static auto typedef_v = xecs::system::type::update
     {
         .m_pName = "FireBulletSystem"
     };
 
     using query = std::tuple
     <
-        xecs::query::none_of< Player >
+
     >;
 
-    void operator()(
-        Position& _position, const Direction& _direction,
-        const Velocity& _velocity, const FireBullet& _fireBullet) const noexcept
+    void operator()(Velocity& _velocity, Position& _position, GridCell& _gridCell, Bullet& _bullet)
     {
-        _position.m_value += !_fireBullet.m_value * _direction.m_value * _velocity.m_value;
+        _position.m_value += _velocity.m_value;
+        _gridCell = grid::ComputeGridCellFromWorldPosition(_position.m_value);
     }
 };

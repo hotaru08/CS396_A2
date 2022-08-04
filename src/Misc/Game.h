@@ -53,11 +53,10 @@ struct Game
 
         // Create Turrent Prefab
         m_prefabGUIDs[PREFAB_TYPES::TURRET] =
-        m_gameMgr->CreatePrefab<Position, Scale, Rotation, GridCell, Timer, FireBullet, Direction>
+        m_gameMgr->CreatePrefab<Position, Scale, Rotation, GridCell, Timer, FireBullet>
         (
             [&](Position& _position, Scale& _scale, Rotation& _rotation, 
-                GridCell& _cell, Timer& _timer, FireBullet& _fireBullet,
-                Direction& _direction) noexcept
+                GridCell& _cell, Timer& _timer, FireBullet& _fireBullet) noexcept
             {
                 _position.m_value = xcore::vector2{ 0.0f, 0.0f };
                 _rotation.m_value = 0.0f;
@@ -65,24 +64,20 @@ struct Game
 
                 _cell.m_X = _cell.m_Y = 0;
                 _timer.m_value = 0.0f;
-                _direction.m_value = xcore::vector2{ 0.0f, 0.0f };
             }
         );
 
         // Create Player Prefab
         m_prefabGUIDs[PREFAB_TYPES::PLAYER] =
-        m_gameMgr->CreatePrefab<Position, Scale, Rotation, GridCell, Player, Direction, Velocity>
+        m_gameMgr->CreatePrefab<Position, Scale, Rotation, GridCell, Player, Velocity>
         (
             [&](Position& _position, Scale& _scale, Rotation& _rotation,
-                GridCell& _cell, Direction& _direction, Velocity& _velocity) noexcept
+                GridCell& _cell, Velocity& _velocity) noexcept
             {
                 _position.m_value       = xcore::vector2{ 0.0f, 0.0f };
                 _scale.m_value          = xcore::vector2{ 1.0f, 1.0f };
                 _rotation.m_value       = 0.0f;
                 _cell.m_X = _cell.m_Y   = 0;
-
-                _direction.m_value      = xcore::vector2{ 0.0f, 0.0f };
-                _velocity.m_value       = xcore::vector2{ 5.0f, 5.0f };
             }
         );
     }
@@ -123,15 +118,12 @@ struct Game
             (
                 1, m_prefabGUIDs[PREFAB_TYPES::TURRET],
                 [&](Position& _position, Rotation& _rotation, Scale& _scale,
-                    Direction& _direction, GridCell& _cell, Timer& _timer) noexcept
+                    GridCell& _cell, Timer& _timer) noexcept
                 {
-                    _direction.m_value.m_X = std::cosf(degBetweenTurrets * i);
-                    _direction.m_value.m_Y = -std::sinf(degBetweenTurrets * i);
-
                     _position.m_value = xcore::vector2
                     {
-                        m_windowInst.m_width * 0.5f + 100.0f * _direction.m_value.m_X,
-                        m_windowInst.m_height * 0.5f + 100.0f * _direction.m_value.m_Y
+                        m_windowInst.m_width * 0.5f + 100.0f  * std::cosf(degBetweenTurrets * i),
+                        m_windowInst.m_height * 0.5f + 100.0f * -std::sinf(degBetweenTurrets * i)
                     };
                     _rotation.m_value = xcore::math::RadToDeg(degBetweenTurrets * i);
                     _scale.m_value    = xcore::vector2{ 30.0f, 30.0f };

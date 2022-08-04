@@ -6,7 +6,6 @@
 #include <Components\Velocity.h>
 #include <Components\GridCells.h>
 #include <Components\Timer.h>
-#include <Components\Direction.h>
 
 #include <Components\Player.h>
 #include <Components\FireBullet.h>
@@ -14,7 +13,7 @@
 
 #define ALL_COMPONENTS \
     Position, Scale, Rotation, \
-    Velocity, Direction, \
+    Velocity, \
     Timer, \
     GridCell, \
     Player, FireBullet, Bullet

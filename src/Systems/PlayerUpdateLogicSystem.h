@@ -17,9 +17,9 @@ struct PlayerUpdateLogicSystem : xecs::system::instance
         .m_pName = "PlayerUpdateLogicSystem"
     };
 
-    void operator()(Velocity& _velocity, Direction& _direction, Position& _position, GridCell& _gridCell)
+    void operator()(Velocity& _velocity, Position& _position, GridCell& _gridCell)
     {
-        _position.m_value += _direction.m_value * _velocity.m_value;
+        _position.m_value += _velocity.m_value;
         _gridCell = grid::ComputeGridCellFromWorldPosition(_position.m_value);
     }
 };
