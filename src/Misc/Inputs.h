@@ -10,7 +10,7 @@ struct Keys
     };
     std::array<std::uint8_t, 0xff + 1> m_keys;
 
-    void SetKeyState(char x, bool OnOff) noexcept
+    void SetKeyState(const char x, const bool OnOff) noexcept
     {
         auto& key = m_keys[static_cast<std::uint8_t>(x)];
 
@@ -31,20 +31,20 @@ struct Keys
         }
     }
 
-    bool GetKeyUp(char x) noexcept
+    bool GetKeyUp(const char x) const noexcept
     {
         return (m_keys[static_cast<std::uint8_t>(x)] & static_cast<std::uint8_t>(KEY_STATE::RELEASED));
     }
 
-    bool GetKeyDown(char x) noexcept
+    bool GetKeyDown(const char x) const noexcept
     {
         return (m_keys[static_cast<std::uint8_t>(x)] & static_cast<std::uint8_t>(KEY_STATE::TRIGGERED));
     }
 
-    //bool getKey(char x) noexcept
-    //{
-    //    return (m_keys[static_cast<std::uint8_t>(x)] & static_cast<std::uint8_t>(KEY_STATE::HOLD));
-    //}
+    bool GetKey(const char x) const noexcept
+    {
+        return (m_keys[static_cast<std::uint8_t>(x)] & static_cast<std::uint8_t>(KEY_STATE::HOLD));
+    }
 
     void Poll() noexcept
     {

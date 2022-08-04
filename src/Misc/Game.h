@@ -41,40 +41,48 @@ struct Game
     {
         // Create Tower Prefab
         m_prefabGUIDs[PREFAB_TYPES::TOWER] =
-        m_gameMgr->CreatePrefab<Position, Scale, GridCell, Timer>
+        m_gameMgr->CreatePrefab<Position, Scale, GridCell>
         (
-            [&](Position& _position, Scale& _scale, GridCell& _cell, Timer& _timer) noexcept
+            [&](Position& _position, Scale& _scale, GridCell& _cell) noexcept
             {
                 _position.m_value   = xcore::vector2{ 0.0f, 0.0f };
                 _scale.m_value      = xcore::vector2{ 1.0f, 1.0f };
                 _cell.m_X           = _cell.m_Y = 0;
-                _timer.m_value      = 0.0f;
             }
         );
 
-        // Create Tower Prefab
+        // Create Turrent Prefab
         m_prefabGUIDs[PREFAB_TYPES::TURRET] =
-        m_gameMgr->CreatePrefabVariant
+        m_gameMgr->CreatePrefab<Position, Scale, Rotation, GridCell, Timer, FireBullet, Direction>
         (
-            m_prefabGUIDs[PREFAB_TYPES::TOWER],
-            [&](Timer& _timer) noexcept
+            [&](Position& _position, Scale& _scale, Rotation& _rotation, 
+                GridCell& _cell, Timer& _timer, FireBullet& _fireBullet,
+                Direction& _direction) noexcept
             {
-                _timer.m_value = 10.0f;
+                _position.m_value = xcore::vector2{ 0.0f, 0.0f };
+                _rotation.m_value = 0.0f;
+                _scale.m_value = xcore::vector2{ 1.0f, 1.0f };
+
+                _cell.m_X = _cell.m_Y = 0;
+                _timer.m_value = 0.0f;
+                _direction.m_value = xcore::vector2{ 0.0f, 0.0f };
             }
         );
 
         // Create Player Prefab
         m_prefabGUIDs[PREFAB_TYPES::PLAYER] =
-        m_gameMgr->CreatePrefab<Position, Scale, Rotation, GridCell, Player, Velocity>
+        m_gameMgr->CreatePrefab<Position, Scale, Rotation, GridCell, Player, Direction, Velocity>
         (
-            [&](Position& _position, Scale& _scale, Rotation& _rotation, GridCell& _cell, Velocity& _velocity) noexcept
+            [&](Position& _position, Scale& _scale, Rotation& _rotation,
+                GridCell& _cell, Direction& _direction, Velocity& _velocity) noexcept
             {
                 _position.m_value       = xcore::vector2{ 0.0f, 0.0f };
                 _scale.m_value          = xcore::vector2{ 1.0f, 1.0f };
-                _scale.m_value          = 0.0f;
+                _rotation.m_value       = 0.0f;
                 _cell.m_X = _cell.m_Y   = 0;
 
-                _velocity.m_value = xcore::vector2{ 0.0f, 0.0f };
+                _direction.m_value      = xcore::vector2{ 0.0f, 0.0f };
+                _velocity.m_value       = xcore::vector2{ 5.0f, 5.0f };
             }
         );
     }
@@ -87,7 +95,7 @@ struct Game
             1, m_prefabGUIDs[PREFAB_TYPES::TOWER],
             [&](Position& _position, Scale& _scale, GridCell& _cell) noexcept
             {
-                _scale.m_value      = xcore::vector2{ 10.0f, 10.0f };
+                _scale.m_value      = xcore::vector2{ 30.0f, 30.0f };
                 _position.m_value   = xcore::vector2{ m_windowInst.m_width * 0.5f, m_windowInst.m_height * 0.5f };
                 _cell               = grid::ComputeGridCellFromWorldPosition(_position.m_value);
             }
@@ -99,11 +107,39 @@ struct Game
             1, m_prefabGUIDs[PREFAB_TYPES::PLAYER],
             [&](Position& _position, Scale& _scale, GridCell& _cell) noexcept
             {
-                _scale.m_value      = xcore::vector2{ 30.0f, 30.0f };
-                _position.m_value   = xcore::vector2{ m_windowInst.m_width * 0.5f, m_windowInst.m_height * 0.5f - 100.0f };
+                _scale.m_value      = xcore::vector2{ 15.0f, 15.0f };
+                _position.m_value   = xcore::vector2{ m_windowInst.m_width * 0.5f, m_windowInst.m_height * 0.5f + 100.0f };
                 _cell               = grid::ComputeGridCellFromWorldPosition(_position.m_value);
             }
         );
+
+        // Create Turrent instances from prefabs, around the Main Tower
+        unsigned totalTurrets = 4;
+        float degBetweenTurrets = xcore::math::PI2.m_Value / totalTurrets;
+
+        for (unsigned i = 0; i < totalTurrets; ++i)
+        {
+            m_gameMgr->CreatePrefabInstance
+            (
+                1, m_prefabGUIDs[PREFAB_TYPES::TURRET],
+                [&](Position& _position, Rotation& _rotation, Scale& _scale,
+                    Direction& _direction, GridCell& _cell, Timer& _timer) noexcept
+                {
+                    _direction.m_value.m_X = std::cosf(degBetweenTurrets * i);
+                    _direction.m_value.m_Y = -std::sinf(degBetweenTurrets * i);
+
+                    _position.m_value = xcore::vector2
+                    {
+                        m_windowInst.m_width * 0.5f + 100.0f * _direction.m_value.m_X,
+                        m_windowInst.m_height * 0.5f + 100.0f * _direction.m_value.m_Y
+                    };
+                    _rotation.m_value = xcore::math::RadToDeg(degBetweenTurrets * i);
+                    _scale.m_value    = xcore::vector2{ 30.0f, 30.0f };
+
+                    _cell = grid::ComputeGridCellFromWorldPosition(_position.m_value);
+                }
+            );
+        }
     }
 
     void InitializeGame() noexcept

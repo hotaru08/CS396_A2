@@ -1,33 +1,33 @@
 /******************************************************************************
-filename:	Velocity.h
+filename:	Bullet.h
 author:		Jolyn Wong Kaiyi, wong.k@digipen.edu
 Project:	CS396 Assignment 02
 
 Description:
 
-    Data regarding rotation around the z - axis.
+    Data regarding bullet.
 
 ******************************************************************************/
 #pragma once
 
-struct Velocity
+struct Bullet
 {
     constexpr static auto typedef_v = xecs::component::type::data
     {
-        .m_pName = "Velocity"
+        .m_pName = "Bullet"
     };
 
     xcore::err Serialize(xecs::serializer::stream& TextFile, bool) noexcept
     {
-        TextFile.Field("Direction" , m_value.m_X, m_value.m_Y).clear();
-        return { };
+        TextFile.Field("Owner", m_owner).clear();
+        return{};
     }
 
-    xcore::vector2 m_value; //<! Velocity Move Speed
+    xecs::component::entity m_owner;
 };
 
-property_begin(Velocity)
+property_begin(Bullet)
 {
-    property_var(m_value)
+    property_var(m_owner)
 }
 property_end()

@@ -1,32 +1,32 @@
 /******************************************************************************
-filename:	Velocity.h
+filename:	FireBullet.h
 author:		Jolyn Wong Kaiyi, wong.k@digipen.edu
 Project:	CS396 Assignment 02
 
 Description:
 
-    Data regarding rotation around the z - axis.
+    Data regarding the firing of a bullet
 
 ******************************************************************************/
 #pragma once
 
-struct Velocity
+struct FireBullet
 {
     constexpr static auto typedef_v = xecs::component::type::data
     {
-        .m_pName = "Velocity"
+        .m_pName = "FireBullet"
     };
 
     xcore::err Serialize(xecs::serializer::stream& TextFile, bool) noexcept
     {
-        TextFile.Field("Direction" , m_value.m_X, m_value.m_Y).clear();
+        TextFile.Field("Value", m_value).clear();
         return { };
     }
 
-    xcore::vector2 m_value; //<! Velocity Move Speed
+    bool m_value;
 };
 
-property_begin(Velocity)
+property_begin(FireBullet)
 {
     property_var(m_value)
 }

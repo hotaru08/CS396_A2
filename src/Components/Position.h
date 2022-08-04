@@ -26,8 +26,8 @@ struct Position
     xcore::vector2 m_value;
 };
 
-//property_begin(Position)
-//{
-//    property_var(m_value)
-//}
-//property_end()
+property_begin(Position)
+{
+    property_var(m_value)
+}
+property_end()

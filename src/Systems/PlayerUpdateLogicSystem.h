@@ -17,39 +17,9 @@ struct PlayerUpdateLogicSystem : xecs::system::instance
         .m_pName = "PlayerUpdateLogicSystem"
     };
 
-    void operator()(Velocity& _velocity, Position& _position)
+    void operator()(Velocity& _velocity, Direction& _direction, Position& _position, GridCell& _gridCell)
     {
-        _position.m_value += _velocity.m_value;
+        _position.m_value += _direction.m_value * _velocity.m_value;
+        _gridCell = grid::ComputeGridCellFromWorldPosition(_position.m_value);
     }
-
-
-    //void OnEvent(const unsigned char _key) noexcept
-    //{
-    //    // Seach for entities with Player component to update movement state
-    //    Foreach
-    //    (
-    //        Search(m_playerInputQuery),
-    //        [&](Player& _player)
-    //        {
-    //            // Update 
-    //            switch (_key)
-    //            {
-    //            case 'w':
-    //                _player.m_moveStates[static_cast<std::uint8_t>(Player::MOVE_STATE::UP)] = true;
-    //                break;
-    //            case 's':
-    //                _player.m_moveStates[static_cast<std::uint8_t>(Player::MOVE_STATE::DOWN)] = true;
-    //                break;
-    //            case 'a':
-    //                _player.m_moveStates[static_cast<std::uint8_t>(Player::MOVE_STATE::LEFT)] = true;
-    //                break;
-    //            case 'd':
-    //                _player.m_moveStates[static_cast<std::uint8_t>(Player::MOVE_STATE::RIGHT)] = true;
-    //                break;
-    //            }
-    //        }
-    //    );
-    //}
-
-    //xecs::query::instance m_playerInputQuery;
 };

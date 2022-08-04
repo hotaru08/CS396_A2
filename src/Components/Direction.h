@@ -1,5 +1,5 @@
 /******************************************************************************
-filename:	Velocity.h
+filename:	Direction.h
 author:		Jolyn Wong Kaiyi, wong.k@digipen.edu
 Project:	CS396 Assignment 02
 
@@ -10,23 +10,23 @@ Description:
 ******************************************************************************/
 #pragma once
 
-struct Velocity
+struct Direction
 {
     constexpr static auto typedef_v = xecs::component::type::data
     {
-        .m_pName = "Velocity"
+        .m_pName = "Direction"
     };
 
     xcore::err Serialize(xecs::serializer::stream& TextFile, bool) noexcept
     {
-        TextFile.Field("Direction" , m_value.m_X, m_value.m_Y).clear();
+        TextFile.Field("Value", m_value.m_X, m_value.m_Y).clear();
         return { };
     }
 
-    xcore::vector2 m_value; //<! Velocity Move Speed
+    xcore::vector2 m_value;
 };
 
-property_begin(Velocity)
+property_begin(Direction)
 {
     property_var(m_value)
 }

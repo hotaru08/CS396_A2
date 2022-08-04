@@ -1,16 +1,16 @@
 /******************************************************************************
-filename:	PlayerInputs_OnKeyHold.h
+filename:	PlayerInputs_KeyEventsSystem.h
 author:		Jolyn Wong Kaiyi, wong.k@digipen.edu
 Project:	CS396 Assignment 02
 
 Description:
 
-    System that handles any key hold events for player inputs.
+    
 
 ******************************************************************************/
 #pragma once
 
-struct PlayerInputs_OnKeyHold : xecs::system::instance
+struct PlayerInputs_OnKeyDown : xecs::system::instance
 {
     constexpr static auto typedef_v =
     xecs::system::type::global_event< OnKeyDown >
@@ -29,23 +29,26 @@ struct PlayerInputs_OnKeyHold : xecs::system::instance
         Foreach
         (
             Search(m_playerInputQuery),
-            [&](Velocity& _velocity)
+            [&](Direction& _direction)
             {
-
                 // Update 
                 switch (_key)
                 {
                 case 'w':
-                    _velocity.m_value.m_Y = -1.0f;
+                    _direction.m_value.m_Y = -1.0f;
                     break;
                 case 's':
-                    _velocity.m_value.m_Y = 1.0f;
+                    _direction.m_value.m_Y = 1.0f;
                     break;
                 case 'a':
-                    _velocity.m_value.m_X = -1.0f;
+                    _direction.m_value.m_X = -1.0f;
                     break;
                 case 'd':
-                    _velocity.m_value.m_X = 1.0f;
+                    _direction.m_value.m_X = 1.0f;
+                    break;
+
+                case '~': // Set to render debug info
+                    //SendGlobalEvent< RenderDebugInfo >(true);
                     break;
                 }
             }
@@ -74,17 +77,17 @@ struct PlayerInputs_OnKeyUp : xecs::system::instance
         Foreach
         (
             Search(m_playerInputQuery),
-            [&](Velocity& _velocity)
+            [&](Direction& _direction)
             {
                 switch (_key)
                 {
                 case 'w':
                 case 's':
-                    _velocity.m_value.m_Y = 0.0f;
+                    _direction.m_value.m_Y = 0.0f;
                     break;
                 case 'a':
                 case 'd':
-                    _velocity.m_value.m_X = 0.0f;
+                    _direction.m_value.m_X = 0.0f;
                     break;
                 }
             }

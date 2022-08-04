@@ -19,6 +19,7 @@ Description:
 #include <cstdint>
 #include <tuple>
 #include <cmath>
+#include <chrono>
 
 #define GLUT_STATIC_LIB
 #include <GL\glut.h>
