@@ -38,4 +38,5 @@ Description:
 
 // Game ----------------------------------------------------------------------
 #include <Misc\Game.h>
-#include <Systems\RenderCameraSystem.hpp>
+#include <Systems\Logic\FireBulletSystem.hpp>
+#include <Systems\Render\RenderCameraSystem.hpp>

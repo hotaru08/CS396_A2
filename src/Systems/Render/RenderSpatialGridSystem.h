@@ -26,7 +26,7 @@ struct RenderSpatialGridSystem : xecs::system::instance
     void operator()(const GridCell& _gridCell, const xecs::component::share_filter& _shareFilter) noexcept
     {
         // Hide nodes where there are not entities
-        if constexpr (false)
+        //if constexpr (false)
         {
             int nEntities = 0;
             for (auto& ArchetypeCell : _shareFilter.m_lEntries)
@@ -49,52 +49,52 @@ struct RenderSpatialGridSystem : xecs::system::instance
         glVertex2i(X + SizeX, Y - SizeY);
         glEnd();
 
-        //enum print
-        //{
-        //    NONE
-        //    , FAMILIES
-        //    , ENTITIES
-        //    , ARCHETYPES
-        //    , GRIDCELL_XY
-        //    , MAX_DISPLAY
-        //};
+        enum print
+        {
+            NONE
+            , FAMILIES
+            , ENTITIES
+            , ARCHETYPES
+            , GRIDCELL_XY
+            , MAX_DISPLAY
+        };
 
-        //// What are we printing?
-        //switch (print::NONE)
-        //{
-        //case print::ARCHETYPES:
-        //{
-        //    glColor3f(1.0f, 1.0f, 1.0f);
-        //    GlutPrint(X, Y - 15, "%d", _shareFilter.m_lEntries.size());
-        //    break;
-        //}
-        //case print::FAMILIES:
-        //{
-        //    int nFamilies = 0;
-        //    for (auto& ArchetypeCell : _shareFilter.m_lEntries)
-        //        nFamilies += static_cast<int>(ArchetypeCell.m_lFamilies.size());
+        // What are we printing?
+        switch (print::NONE)
+        {
+        case print::ARCHETYPES:
+        {
+            glColor3f(1.0f, 1.0f, 1.0f);
+            Text::PrintText(X, Y - 15, "%d", _shareFilter.m_lEntries.size());
+            break;
+        }
+        case print::FAMILIES:
+        {
+            int nFamilies = 0;
+            for (auto& ArchetypeCell : _shareFilter.m_lEntries)
+                nFamilies += static_cast<int>(ArchetypeCell.m_lFamilies.size());
 
-        //    glColor3f(1.0f, 1.0f, 1.0f);
-        //    GlutPrint(X, Y - 15, "%d", nFamilies);
-        //    break;
-        //}
-        //case print::ENTITIES:
-        //{
-        //    int nEntities = 0;
-        //    for (auto& ArchetypeCell : _shareFilter.m_lEntries)
-        //        for (auto& Family : ArchetypeCell.m_lFamilies)
-        //            nEntities += static_cast<int>(Family->m_DefaultPool.Size());
+            glColor3f(1.0f, 1.0f, 1.0f);
+            Text::PrintText(X, Y - 15, "%d", nFamilies);
+            break;
+        }
+        case print::ENTITIES:
+        {
+            int nEntities = 0;
+            for (auto& ArchetypeCell : _shareFilter.m_lEntries)
+                for (auto& Family : ArchetypeCell.m_lFamilies)
+                    nEntities += static_cast<int>(Family->m_DefaultPool.Size());
 
-        //    glColor3f(1.0f, 1.0f, 1.0f);
-        //    GlutPrint(X, Y - 15, "%d", nEntities);
-        //    break;
-        //}
-        //case print::GRIDCELL_XY:
-        //{
-        //    glColor3f(1.0f, 1.0f, 1.0f);
-        //    GlutPrint(X - 23, Y - 15, "%d,%d", GridCell.m_X, GridCell.m_Y);
-        //    break;
-        //}
-        //}
+            glColor3f(1.0f, 1.0f, 1.0f);
+            Text::PrintText(X, Y - 15, "%d", nEntities);
+            break;
+        }
+        case print::GRIDCELL_XY:
+        {
+            glColor3f(1.0f, 1.0f, 1.0f);
+            Text::PrintText(X - 23, Y - 15, "%d,%d", _gridCell.m_X, _gridCell.m_Y);
+            break;
+        }
+        }
     }
 };

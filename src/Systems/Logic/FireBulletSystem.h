@@ -17,9 +17,5 @@ struct FireBulletSystem : xecs::system::instance
         .m_pName = "FireBulletSystem"
     };
 
-    void operator()(Velocity& _velocity, Position& _position, GridCell& _gridCell, Bullet& _bullet)
-    {
-        _position.m_value += _velocity.m_value;
-        _gridCell = grid::ComputeGridCellFromWorldPosition(_position.m_value);
-    }
+    void operator()(Velocity& _velocity, Position& _position, GridCell& _gridCell, Bullet& _bullet) noexcept;
 };

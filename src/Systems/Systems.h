@@ -6,6 +6,7 @@
 
 #include <Systems\Logic\PlayerUpdateLogicSystem.h>
 #include <Systems\Logic\FireBulletSystem.h>
+#include <Systems\Logic\TurretShootingSystem.h>
 
 
 #include <Systems\Render\RenderCameraSystem.h>
@@ -21,3 +22,4 @@
     TurretShootingSystem, FireBulletSystem, \
     RenderCameraSystem, RenderSpatialGridSystem, RenderPlayerSystem,\
     RenderTurretSystem, RenderTowerSystem, RenderBulletSystem
+
