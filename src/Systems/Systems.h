@@ -1,18 +1,19 @@
 #pragma once
 
-#include <Systems\UpdateTimerSystem.h>
+#include <Systems\Timer\UpdateTimerSystem.h>
 
-#include <Systems\EventSystems\PlayerInputs_KeyEventsSystem.h>
-#include <Systems\PlayerUpdateLogicSystem.h>
+#include <Systems\Events\PlayerInputs_KeyEventsSystem.h>
 
-#include <Systems\FireBulletSystem.h>
+#include <Systems\Logic\PlayerUpdateLogicSystem.h>
+#include <Systems\Logic\FireBulletSystem.h>
 
-#include <Systems\RenderCameraSystem.h>
-#include <Systems\RenderTowerSystem.h>
-#include <Systems\RenderTurretSystem.h>
-#include <Systems\RenderPlayerSystem.h>
-#include <Systems\RenderBulletSystem.h>
-#include <Systems\RenderSpatialGridSystem.h>
+
+#include <Systems\Render\RenderCameraSystem.h>
+#include <Systems\Render\RenderTowerSystem.h>
+#include <Systems\Render\RenderTurretSystem.h>
+#include <Systems\Render\RenderPlayerSystem.h>
+#include <Systems\Render\RenderBulletSystem.h>
+#include <Systems\Render\RenderSpatialGridSystem.h>
 
 #define ALL_SYSTEMS \
     UpdateTimerSystem, UpdateTimerShootingSystem, \

@@ -19,10 +19,15 @@ struct Game
         TURRET,
 
         PLAYER,
-
+        
         TOWER_ATTACKING_AI,
+        TOWER_ATTACKING_AI_SPAWNER,
+        
         PLAYER_ATTACKING_AI,
-        BOMBER_AI
+        PLAYER_ATTACKING_AI_SPAWNER,
+
+        BOMBER_AI,
+        BOMBER_AI_SPAWNER
     };
 
     void Initialize() noexcept
@@ -30,7 +35,6 @@ struct Game
         xcore::Init("TowerDefense");
 
         m_gameMgr = std::make_unique< xecs::game_mgr::instance >();
-        RenderCameraSystem::m_windowPtr = &m_windowInst;
 
         m_gameMgr->RegisterComponents< ALL_COMPONENTS >();
         m_gameMgr->RegisterGlobalEvents< ALL_EVENTS >();
@@ -79,6 +83,20 @@ struct Game
                 _rotation.m_value       = 0.0f;
                 _cell.m_X = _cell.m_Y   = 0;
             }
+        );
+
+        // Create Tower Attacking AI Prefab
+        m_prefabGUIDs[PREFAB_TYPES::TOWER_ATTACKING_AI] =
+            m_gameMgr->CreatePrefab<Position, Scale, Rotation, GridCell, Velocity>
+            (
+                [&](Position& _position, Scale& _scale, Rotation& _rotation,
+                    GridCell& _cell, Velocity& _velocity) noexcept
+                {
+                    _position.m_value = xcore::vector2{ 0.0f, 0.0f };
+                    _scale.m_value = xcore::vector2{ 1.0f, 1.0f };
+                    _rotation.m_value = 0.0f;
+                    _cell.m_X = _cell.m_Y = 0;
+                }
         );
     }
 

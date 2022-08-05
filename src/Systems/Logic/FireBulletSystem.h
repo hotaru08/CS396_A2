@@ -17,11 +17,6 @@ struct FireBulletSystem : xecs::system::instance
         .m_pName = "FireBulletSystem"
     };
 
-    using query = std::tuple
-    <
-
-    >;
-
     void operator()(Velocity& _velocity, Position& _position, GridCell& _gridCell, Bullet& _bullet)
     {
         _position.m_value += _velocity.m_value;

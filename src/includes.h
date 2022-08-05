@@ -38,3 +38,4 @@ Description:
 
 // Game ----------------------------------------------------------------------
 #include <Misc\Game.h>
+#include <Systems\RenderCameraSystem.hpp>
