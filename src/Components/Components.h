@@ -10,10 +10,10 @@
 #include <Components\Player.h>
 #include <Components\FireBullet.h>
 #include <Components\Bullet.h>
+#include <Components\Target.h>
 
 #define ALL_COMPONENTS \
-    Position, Scale, Rotation, \
-    Velocity, \
-    Timer, \
-    GridCell, \
-    Player, FireBullet, Bullet
+    Position, Scale, Rotation,  \
+    Velocity, Timer, GridCell,  \
+    Player, FireBullet, Bullet, \
+    Target

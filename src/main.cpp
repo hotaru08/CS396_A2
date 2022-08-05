@@ -58,9 +58,6 @@ int main(int argc, char** argv)
             {
                 sg_game.m_windowInst.m_inputs.m_keys.SetKeyState(Key, true);
                 sg_game.m_gameMgr->SendGlobalEvent< OnKeyDown >(Key);
-
-                sg_game.m_windowInst.m_inputs.m_mouseX = MouseX;
-                sg_game.m_windowInst.m_inputs.m_mouseY = MouseY;
             }
         );
         glutKeyboardUpFunc
@@ -69,22 +66,24 @@ int main(int argc, char** argv)
             {
                 sg_game.m_windowInst.m_inputs.m_keys.SetKeyState(Key, false);
                 sg_game.m_gameMgr->SendGlobalEvent< OnKeyUp >(Key);
-
-                sg_game.m_windowInst.m_inputs.m_mouseX = MouseX;
-                sg_game.m_windowInst.m_inputs.m_mouseY = MouseY;
             }
         );
         glutMouseFunc
         (
             [](int Button, int State, int MouseX, int MouseY) noexcept
             {
-                sg_game.m_windowInst.m_inputs.m_mouseX = MouseX;
-                sg_game.m_windowInst.m_inputs.m_mouseY = MouseY;
-
                 if (Button == GLUT_LEFT_BUTTON)
                     sg_game.m_windowInst.m_inputs.m_mouseLeftBtn = (State == GLUT_DOWN);
                 else if (Button == GLUT_RIGHT_BUTTON)
                     sg_game.m_windowInst.m_inputs.m_mouseRightBtn = (State == GLUT_DOWN);
+            }
+        );
+        glutPassiveMotionFunc
+        (
+            [](const int _x, const int _y)
+            {
+                sg_game.m_windowInst.m_inputs.m_mouseX = _x;
+                sg_game.m_windowInst.m_inputs.m_mouseY = _y;
             }
         );
 

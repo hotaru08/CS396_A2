@@ -10,11 +10,11 @@ Description:
 ******************************************************************************/
 #pragma once
 
-struct PlayerUpdateLogicSystem : xecs::system::instance
+struct UpdateMovementSystem : xecs::system::instance
 {
     constexpr static auto typedef_v = xecs::system::type::update
     {
-        .m_pName = "PlayerUpdateLogicSystem"
+        .m_pName = "UpdateMovementSystem"
     };
 
     void operator()(Velocity& _velocity, Position& _position, GridCell& _gridCell)

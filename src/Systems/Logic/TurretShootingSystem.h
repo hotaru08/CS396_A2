@@ -27,11 +27,12 @@ struct TurretShootingSystem : xecs::system::instance
     {
         // Create Player Prefab
         m_bulletGUID =
-            CreatePrefab<Position, Rotation, Scale, Bullet, GridCell, Velocity>
+            CreatePrefab<Position, Rotation, Scale, Bullet, GridCell, Velocity, Timer>
             (
-                [&](Scale& _scale, Velocity& _velocity) noexcept
+                [&](Scale& _scale, Timer& _timer) noexcept
                 {
                     _scale.m_value = xcore::vector2{ 5.0f, 5.0f };
+                    _timer.m_value = 1.0f;
                 }
         );
     }

@@ -1,33 +1,33 @@
 /******************************************************************************
-filename:	Bullet.h
+filename:	Target.h
 author:		Jolyn Wong Kaiyi, wong.k@digipen.edu
 Project:	CS396 Assignment 02
 
 Description:
 
-    Data regarding bullet.
+    Data regarding target, where entities will travel to.
 
 ******************************************************************************/
 #pragma once
 
-struct Bullet
+struct Target
 {
     constexpr static auto typedef_v = xecs::component::type::data
     {
-        .m_pName = "Bullet"
+        .m_pName = "Target"
     };
 
     xcore::err Serialize(xecs::serializer::stream& TextFile, bool) noexcept
     {
-        TextFile.Field("Owner", m_owner).clear();
+        TextFile.Field("Target", m_target).clear();
         return{};
     }
 
-    xecs::component::entity m_owner; //<! Entity that bullet belongs to
+    xecs::component::entity m_target; //<! Target entity that current entity is going for
 };
 
-property_begin(Bullet)
+property_begin(Target)
 {
-    property_var(m_owner)
+    property_var(m_target)
 }
 property_end()

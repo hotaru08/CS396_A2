@@ -21,6 +21,7 @@ struct RenderTowerSystem : xecs::system::instance
     using query = std::tuple
     <
         xecs::query::none_of< Player >,
+        xecs::query::none_of< Bullet >,
         xecs::query::none_of< FireBullet >
     >;
 

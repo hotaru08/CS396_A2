@@ -87,14 +87,12 @@ struct Game
 
         // Create Tower Attacking AI Prefab
         m_prefabGUIDs[PREFAB_TYPES::TOWER_ATTACKING_AI] =
-            m_gameMgr->CreatePrefab<Position, Scale, Rotation, GridCell, Velocity>
+            m_gameMgr->CreatePrefab<Position, Scale, Rotation, GridCell, Velocity, Target>
             (
                 [&](Position& _position, Scale& _scale, Rotation& _rotation,
                     GridCell& _cell, Velocity& _velocity) noexcept
                 {
-                    _position.m_value = xcore::vector2{ 0.0f, 0.0f };
                     _scale.m_value = xcore::vector2{ 1.0f, 1.0f };
-                    _rotation.m_value = 0.0f;
                     _cell.m_X = _cell.m_Y = 0;
                 }
         );
@@ -111,6 +109,31 @@ struct Game
                 _scale.m_value      = xcore::vector2{ 30.0f, 30.0f };
                 _position.m_value   = xcore::vector2{ m_windowInst.m_width * 0.5f, m_windowInst.m_height * 0.5f };
                 _cell               = grid::ComputeGridCellFromWorldPosition(_position.m_value);
+
+                // Create Turrent instances from prefabs, around the Main Tower
+                unsigned totalTurrets = 4;
+                float degBetweenTurrets = xcore::math::PI2.m_Value / totalTurrets;
+
+                for (unsigned i = 0; i < totalTurrets; ++i)
+                {
+                    m_gameMgr->CreatePrefabInstance
+                    (
+                        1, m_prefabGUIDs[PREFAB_TYPES::TURRET],
+                        [&](Position& _turrentPos, Rotation& _turretRot, Scale& _turretScale,
+                            GridCell& _turretCell, Timer& _timer) noexcept
+                        {
+                            _turrentPos.m_value = xcore::vector2
+                            {
+                                _position.m_value.m_X + 100.0f * std::cosf(degBetweenTurrets * i),
+                                _position.m_value.m_Y + 100.0f * -std::sinf(degBetweenTurrets * i)
+                            };
+                            _turretRot.m_value = xcore::math::RadToDeg(degBetweenTurrets * i);
+                            _turretScale.m_value = xcore::vector2{ 30.0f, 30.0f };
+
+                            _turretCell = grid::ComputeGridCellFromWorldPosition(_turrentPos.m_value);
+                        }
+                    );
+                }
             }
         );
 
@@ -126,30 +149,17 @@ struct Game
             }
         );
 
-        // Create Turrent instances from prefabs, around the Main Tower
-        unsigned totalTurrets = 4;
-        float degBetweenTurrets = xcore::math::PI2.m_Value / totalTurrets;
-
-        for (unsigned i = 0; i < totalTurrets; ++i)
-        {
-            m_gameMgr->CreatePrefabInstance
-            (
-                1, m_prefabGUIDs[PREFAB_TYPES::TURRET],
-                [&](Position& _position, Rotation& _rotation, Scale& _scale,
-                    GridCell& _cell, Timer& _timer) noexcept
-                {
-                    _position.m_value = xcore::vector2
-                    {
-                        m_windowInst.m_width * 0.5f + 100.0f  * std::cosf(degBetweenTurrets * i),
-                        m_windowInst.m_height * 0.5f + 100.0f * -std::sinf(degBetweenTurrets * i)
-                    };
-                    _rotation.m_value = xcore::math::RadToDeg(degBetweenTurrets * i);
-                    _scale.m_value    = xcore::vector2{ 30.0f, 30.0f };
-
-                    _cell = grid::ComputeGridCellFromWorldPosition(_position.m_value);
-                }
-            );
-        }
+        // Create Enemies instances
+        m_gameMgr->CreatePrefabInstance
+        (
+            1, m_prefabGUIDs[PREFAB_TYPES::PLAYER],
+            [&](Position& _position, Scale& _scale, GridCell& _cell) noexcept
+            {
+                _scale.m_value = xcore::vector2{ 15.0f, 15.0f };
+                _position.m_value = xcore::vector2{ m_windowInst.m_width * 0.5f, m_windowInst.m_height * 0.5f + 100.0f };
+                _cell = grid::ComputeGridCellFromWorldPosition(_position.m_value);
+            }
+        );
     }
 
     void InitializeGame() noexcept

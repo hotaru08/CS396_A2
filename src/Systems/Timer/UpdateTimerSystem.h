@@ -62,5 +62,4 @@ struct UpdateTimerShootingSystem : xecs::system::instance
             _fireBullet.m_value = true;
         }
     }
-
 };
