@@ -1,32 +1,32 @@
 /******************************************************************************
-filename:	Target.h
+filename:	Health.h
 author:		Jolyn Wong Kaiyi, wong.k@digipen.edu
 Project:	CS396 Assignment 02
 
 Description:
 
-    Data regarding target, where entities will travel to.
+    Data regarding health.
 
 ******************************************************************************/
 #pragma once
 
-struct Target
+struct Health
 {
     constexpr static auto typedef_v = xecs::component::type::data
     {
-        .m_pName = "Target"
+        .m_pName = "Health"
     };
 
     xcore::err Serialize(xecs::serializer::stream& TextFile, bool) noexcept
     {
-        TextFile.Field("Target", m_value.m_X, m_value.m_Y).clear();
+        TextFile.Field("Value", m_value).clear();
         return{};
     }
 
-    xcore::vector2 m_value; //<! Target location that current entity is going for
+    float m_value;
 };
 
-property_begin(Target)
+property_begin(Health)
 {
     property_var(m_value)
 }

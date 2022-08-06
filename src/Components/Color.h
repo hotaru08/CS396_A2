@@ -1,33 +1,33 @@
 /******************************************************************************
-filename:	Target.h
+filename:	Color.h
 author:		Jolyn Wong Kaiyi, wong.k@digipen.edu
 Project:	CS396 Assignment 02
 
 Description:
 
-    Data regarding target, where entities will travel to.
+    Data regarding color.
 
 ******************************************************************************/
 #pragma once
 
-struct Target
+struct Color
 {
     constexpr static auto typedef_v = xecs::component::type::data
     {
-        .m_pName = "Target"
+        .m_pName = "Color"
     };
 
     xcore::err Serialize(xecs::serializer::stream& TextFile, bool) noexcept
     {
-        TextFile.Field("Target", m_value.m_X, m_value.m_Y).clear();
+        TextFile.Field("Value", m_value.m_X, m_value.m_Y, m_value.m_Z).clear();
         return{};
     }
 
-    xcore::vector2 m_value; //<! Target location that current entity is going for
+    xcore::vector3 m_value;
 };
 
-property_begin(Target)
-{
-    property_var(m_value)
-}
-property_end()
+//property_begin(Color)
+//{
+//    property_var(m_value)
+//}
+//property_end()

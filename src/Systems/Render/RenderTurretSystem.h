@@ -25,9 +25,10 @@ struct RenderTurretSystem : xecs::system::instance
 
     void operator()(
         const Position& _position, const Rotation& _rotation,
-        const Scale& _scale, const FireBullet& _fireBullet) const noexcept
+        const Scale& _scale, const FireBullet& _fireBullet,
+        const Color& _color) const noexcept
     {
-        glColor3f(0.2f, 0.5f, 1.0f);
+        glColor3f(_color.m_value.m_X, _color.m_value.m_Y, _color.m_value.m_Z);
 
         // Apply Transformation Matrix to quad
         glMatrixMode(GL_MODELVIEW);

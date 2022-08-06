@@ -36,7 +36,7 @@ struct UpdateTimerSystem : xecs::system::instance
             Search(m_timerQuery),
             [&](Timer& _timer)
             {
-                _timer.m_value -= 0.01f;
+                _timer.m_value -= Definitions::FIXED_DELTA_TIME;
             }
         );
 

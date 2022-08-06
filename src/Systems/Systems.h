@@ -12,7 +12,7 @@
 #include <Systems\Render\RenderCameraSystem.h>
 #include <Systems\Render\RenderTowerSystem.h>
 #include <Systems\Render\RenderTurretSystem.h>
-#include <Systems\Render\RenderPlayerSystem.h>
+#include <Systems\Render\RenderMoveablesSystem.h>
 #include <Systems\Render\RenderBulletSystem.h>
 #include <Systems\Render\RenderSpatialGridSystem.h>
 
@@ -20,6 +20,5 @@
     UpdateTimerSystem, UpdateTimerShootingSystem, \
     PlayerInputs_OnKeyDown, PlayerInputs_OnKeyUp, UpdateMovementSystem, \
     TurretShootingSystem, DestroyBulletSystem, \
-    RenderCameraSystem, RenderSpatialGridSystem, RenderPlayerSystem,\
+    RenderCameraSystem, RenderSpatialGridSystem, RenderMoveablesSystem,\
     RenderBulletSystem, RenderTurretSystem, RenderTowerSystem
-

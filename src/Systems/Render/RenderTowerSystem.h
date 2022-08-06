@@ -21,13 +21,14 @@ struct RenderTowerSystem : xecs::system::instance
     using query = std::tuple
     <
         xecs::query::none_of< Player >,
+        xecs::query::none_of< Target >,
         xecs::query::none_of< Bullet >,
         xecs::query::none_of< FireBullet >
     >;
 
-    void operator()(const Position& _position, const Scale& _scale) const noexcept
+    void operator()(const Position& _position, const Scale& _scale, Color& _color) const noexcept
     {
-        glColor3f(0.4f, 0.255f, 1.0f);
+        glColor3f(_color.m_value.m_X, _color.m_value.m_Y, _color.m_value.m_Z);
 
         // Apply Transformation Matrix to circle
         glMatrixMode(GL_MODELVIEW);
@@ -37,20 +38,11 @@ struct RenderTowerSystem : xecs::system::instance
         glScalef(_scale.m_value.m_X, _scale.m_value.m_Y, 0.0f);
 
         // Render a Circle
-        glBegin(GL_TRIANGLE_FAN);
-        unsigned slices = 20;
-        auto degSlice = xcore::math::PI2.m_Value / slices;
-
-        glVertex2f(0.0f, 0.0f);
-        for (unsigned slice = 0; slice < slices; ++slice)
-        {
-            glVertex2f
-            (
-                std::cosf(slice * degSlice),
-                std::sinf(slice * degSlice)
-            );
-        }
-        glVertex2f(1.0f, 0.0f);
+        glBegin(GL_QUADS);
+        glVertex2f(0.5f, -0.5f);
+        glVertex2f(-0.5f, -0.5f);
+        glVertex2f(-0.5f, 0.5f);
+        glVertex2f(0.5f, 0.5f);
         glEnd();
 
         glPopMatrix();

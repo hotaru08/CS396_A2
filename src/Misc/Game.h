@@ -19,15 +19,16 @@ struct Game
         TURRET,
 
         PLAYER,
+        BULLET,
         
         TOWER_ATTACKING_AI,
-        TOWER_ATTACKING_AI_SPAWNER,
-        
         PLAYER_ATTACKING_AI,
-        PLAYER_ATTACKING_AI_SPAWNER,
-
         BOMBER_AI,
-        BOMBER_AI_SPAWNER
+
+        TOWER_TARGET_AI_SPAWNER,
+        PLAYER_TARGET_AI_SPAWNER,
+
+        TOTAL_NUM_PREFABS
     };
 
     void Initialize() noexcept
@@ -36,7 +37,7 @@ struct Game
 
         m_gameMgr = std::make_unique< xecs::game_mgr::instance >();
 
-        m_gameMgr->RegisterComponents< ALL_COMPONENTS >();
+        m_gameMgr->RegisterComponents< ALL_COMPONENTS, ALL_TAGS >();
         m_gameMgr->RegisterGlobalEvents< ALL_EVENTS >();
         m_gameMgr->RegisterSystems< ALL_SYSTEMS >();
     }
@@ -45,56 +46,109 @@ struct Game
     {
         // Create Tower Prefab
         m_prefabGUIDs[PREFAB_TYPES::TOWER] =
-        m_gameMgr->CreatePrefab<Position, Scale, GridCell>
+        m_gameMgr->CreatePrefab<Position, Scale, GridCell, Color, Health>
         (
-            [&](Position& _position, Scale& _scale, GridCell& _cell) noexcept
+            [&](Position& _towerPos, Scale& _scale, Color& _color, Health& _health) noexcept
             {
-                _position.m_value   = xcore::vector2{ 0.0f, 0.0f };
-                _scale.m_value      = xcore::vector2{ 1.0f, 1.0f };
-                _cell.m_X           = _cell.m_Y = 0;
+                _scale.m_value  = xcore::vector2{ 50.0f, 50.0f };
+                _color.m_value  = xcore::vector3{ 0.45490f, 0.45490f, 0.81176f };
+                _health.m_value = 200.0f;
+
+                // Create Tower Target AI Spawner Prefab, setting tower as target
+                m_prefabGUIDs[PREFAB_TYPES::TOWER_TARGET_AI_SPAWNER] =
+                m_gameMgr->CreatePrefab<Position, Target, Timer, TowerAttackAISpawner>
+                (
+                    [&](Target& _target, Timer& _timer) noexcept
+                    {
+                        _target.m_value = _towerPos.m_value;
+                        _timer.m_value = 3.0f;
+                    }
+                );
             }
         );
 
         // Create Turrent Prefab
         m_prefabGUIDs[PREFAB_TYPES::TURRET] =
-        m_gameMgr->CreatePrefab<Position, Scale, Rotation, GridCell, Timer, FireBullet>
+        m_gameMgr->CreatePrefab<Position, Scale, Rotation, GridCell, Timer, FireBullet, Color, Health>
         (
-            [&](Position& _position, Scale& _scale, Rotation& _rotation, 
-                GridCell& _cell, Timer& _timer, FireBullet& _fireBullet) noexcept
+            [&](Scale& _scale, Color& _color, Health& _health) noexcept
             {
-                _position.m_value = xcore::vector2{ 0.0f, 0.0f };
-                _rotation.m_value = 0.0f;
-                _scale.m_value = xcore::vector2{ 1.0f, 1.0f };
-
-                _cell.m_X = _cell.m_Y = 0;
-                _timer.m_value = 0.0f;
+                _scale.m_value  = xcore::vector2{ 30.0f, 30.0f };
+                _color.m_value  = xcore::vector3{ 0.2f, 0.5f, 1.0f };
+                _health.m_value = 100.0f;
             }
         );
 
         // Create Player Prefab
         m_prefabGUIDs[PREFAB_TYPES::PLAYER] =
-        m_gameMgr->CreatePrefab<Position, Scale, Rotation, GridCell, Player, Velocity>
+        m_gameMgr->CreatePrefab<Position, Rotation, Scale, GridCell, Player, Velocity, Color, Health, Timer>
         (
-            [&](Position& _position, Scale& _scale, Rotation& _rotation,
-                GridCell& _cell, Velocity& _velocity) noexcept
+            [&](Position& _playerPos, Scale& _scale, Color& _color, Health& _health) noexcept
             {
-                _position.m_value       = xcore::vector2{ 0.0f, 0.0f };
-                _scale.m_value          = xcore::vector2{ 1.0f, 1.0f };
-                _rotation.m_value       = 0.0f;
-                _cell.m_X = _cell.m_Y   = 0;
+                _scale.m_value  = xcore::vector2{ 20.0f, 20.0f };
+                _color.m_value  = xcore::vector3{ 0.2f, 0.5f, 1.0f };
+                _health.m_value = 100.0f;
+
+                // Create Player Target AI Spawner Prefab, setting player as target
+                m_prefabGUIDs[PREFAB_TYPES::PLAYER_TARGET_AI_SPAWNER] =
+                m_gameMgr->CreatePrefab<Position, Target, Timer, PlayerAttackAISpawner>
+                (
+                    [&](Target& _target, Timer& _timer) noexcept
+                    {
+                        _target.m_value = _playerPos.m_value;
+                        _timer.m_value = 3.0f;
+                    }
+                );
             }
         );
 
-        // Create Tower Attacking AI Prefab
+        // --------------------------------------------------------------------
+
+        // Create Bullet Prefab
+        m_prefabGUIDs[PREFAB_TYPES::BULLET] =
+        m_gameMgr->CreatePrefab<Position, Scale, GridCell, Velocity, Color, Bullet>
+        (
+            [&](Scale& _scale, Color& _color) noexcept
+            {
+                _scale.m_value = xcore::vector2{ 3.0f, 3.0f };
+                _color.m_value = xcore::vector3{ 0.2f, 0.7f, 1.0f };
+            }
+        );
+
+        // Create Tower AI Prefab
         m_prefabGUIDs[PREFAB_TYPES::TOWER_ATTACKING_AI] =
-            m_gameMgr->CreatePrefab<Position, Scale, Rotation, GridCell, Velocity, Target>
-            (
-                [&](Position& _position, Scale& _scale, Rotation& _rotation,
-                    GridCell& _cell, Velocity& _velocity) noexcept
-                {
-                    _scale.m_value = xcore::vector2{ 1.0f, 1.0f };
-                    _cell.m_X = _cell.m_Y = 0;
-                }
+        m_gameMgr->CreatePrefab<Position, Rotation, Scale, GridCell, Velocity, Timer, Color, Target, TowerAI>
+        (
+            [&](Scale& _scale, Color& _color, Velocity& _velocity) noexcept
+            {
+                _scale.m_value = xcore::vector2{ 20.0f, 20.0f };
+                _color.m_value = xcore::vector3{ 1.0f, 0.57647f, 0.41961f };
+                _velocity.m_value = xcore::vector2{ 3.0f, 3.0f };
+            }
+        );
+
+        // Create Player AI Prefab
+        m_prefabGUIDs[PREFAB_TYPES::PLAYER_ATTACKING_AI] =
+        m_gameMgr->CreatePrefab<Position, Rotation, Scale, GridCell, Velocity, Timer, Color, Target, PlayerAI>
+        (
+            [&](Scale& _scale, Color& _color, Velocity& _velocity) noexcept
+            {
+                _scale.m_value = xcore::vector2{ 20.0f, 20.0f };
+                _color.m_value = xcore::vector3{ 0.88627f, 0.36471f, 0.36078f };
+                _velocity.m_value = xcore::vector2{ 3.0f, 3.0f };
+            }
+        );
+
+        // Create Bomber AI Prefab
+        m_prefabGUIDs[PREFAB_TYPES::BOMBER_AI] =
+        m_gameMgr->CreatePrefab<Position, Rotation, Scale, GridCell, Velocity, Timer, Color, Target, BomberAI>
+        (
+            [&](Scale& _scale, Color& _color, Velocity& _velocity) noexcept
+            {
+                _scale.m_value = xcore::vector2{ 20.0f, 20.0f };
+                _color.m_value = xcore::vector3{ 0.71569f, 0.20784f, 0.22353f };
+                _velocity.m_value = xcore::vector2{ 1.5f, 1.5f };
+            }
         );
     }
 
@@ -104,11 +158,10 @@ struct Game
         m_gameMgr->CreatePrefabInstance
         (
             1, m_prefabGUIDs[PREFAB_TYPES::TOWER],
-            [&](Position& _position, Scale& _scale, GridCell& _cell) noexcept
+            [&](Position& _position, GridCell& _cell) noexcept
             {
-                _scale.m_value      = xcore::vector2{ 30.0f, 30.0f };
-                _position.m_value   = xcore::vector2{ m_windowInst.m_width * 0.5f, m_windowInst.m_height * 0.5f };
-                _cell               = grid::ComputeGridCellFromWorldPosition(_position.m_value);
+                _position.m_value = xcore::vector2{ m_windowInst.m_width * 0.5f, m_windowInst.m_height * 0.5f };
+                _cell             = grid::ComputeGridCellFromWorldPosition(_position.m_value);
 
                 // Create Turrent instances from prefabs, around the Main Tower
                 unsigned totalTurrets = 4;
@@ -119,7 +172,7 @@ struct Game
                     m_gameMgr->CreatePrefabInstance
                     (
                         1, m_prefabGUIDs[PREFAB_TYPES::TURRET],
-                        [&](Position& _turrentPos, Rotation& _turretRot, Scale& _turretScale,
+                        [&](Position& _turrentPos, Rotation& _turretRot,
                             GridCell& _turretCell, Timer& _timer) noexcept
                         {
                             _turrentPos.m_value = xcore::vector2
@@ -128,7 +181,6 @@ struct Game
                                 _position.m_value.m_Y + 100.0f * -std::sinf(degBetweenTurrets * i)
                             };
                             _turretRot.m_value = xcore::math::RadToDeg(degBetweenTurrets * i);
-                            _turretScale.m_value = xcore::vector2{ 30.0f, 30.0f };
 
                             _turretCell = grid::ComputeGridCellFromWorldPosition(_turrentPos.m_value);
                         }
@@ -141,24 +193,26 @@ struct Game
         m_gameMgr->CreatePrefabInstance
         (
             1, m_prefabGUIDs[PREFAB_TYPES::PLAYER],
-            [&](Position& _position, Scale& _scale, GridCell& _cell) noexcept
+            [&](Position& _position, GridCell& _cell) noexcept
             {
-                _scale.m_value      = xcore::vector2{ 15.0f, 15.0f };
                 _position.m_value   = xcore::vector2{ m_windowInst.m_width * 0.5f, m_windowInst.m_height * 0.5f + 100.0f };
                 _cell               = grid::ComputeGridCellFromWorldPosition(_position.m_value);
             }
         );
 
-        // Create Enemies instances
+        // Create Spawners
         m_gameMgr->CreatePrefabInstance
         (
-            1, m_prefabGUIDs[PREFAB_TYPES::PLAYER],
-            [&](Position& _position, Scale& _scale, GridCell& _cell) noexcept
-            {
-                _scale.m_value = xcore::vector2{ 15.0f, 15.0f };
-                _position.m_value = xcore::vector2{ m_windowInst.m_width * 0.5f, m_windowInst.m_height * 0.5f + 100.0f };
-                _cell = grid::ComputeGridCellFromWorldPosition(_position.m_value);
-            }
+            1, m_prefabGUIDs[PREFAB_TYPES::TOWER_TARGET_AI_SPAWNER],
+            [&]() noexcept
+            { }
+        );
+
+        m_gameMgr->CreatePrefabInstance
+        (
+            1, m_prefabGUIDs[PREFAB_TYPES::PLAYER_TARGET_AI_SPAWNER],
+            [&]() noexcept
+            { }
         );
     }
 

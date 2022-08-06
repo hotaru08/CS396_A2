@@ -28,6 +28,7 @@ Description:
 #include <Misc\Inputs.h>
 #include <Misc\Text.h>
 #include <Misc\Window.h>
+#include <Misc\Definitions.h>
 
 // ECS ----------------------------------------------------------------------
 #include <Events\Events.h>
@@ -38,5 +39,7 @@ Description:
 
 // Game ----------------------------------------------------------------------
 #include <Misc\Game.h>
+
+#include <Systems\Logic\TurretShootingSystem.hpp>
 #include <Systems\Logic\DestroyBulletSystem.hpp>
 #include <Systems\Render\RenderCameraSystem.hpp>
