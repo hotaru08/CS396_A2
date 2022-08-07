@@ -10,12 +10,40 @@ Description:
 ******************************************************************************/
 #pragma once
 
-void RenderCameraSystem::OnUpdate() noexcept
+void RenderSystem::OnUpdate() noexcept
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glDisable(GL_DEPTH_TEST);
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
 
+    // Call child system to update
+    SendEventFrom<update>(this);
+
+    glColor3f(1.0f, 1.0f, 1.0f);
+    if (sg_game.m_gameOver)
+    {
+        Text::PrintText
+        (
+            sg_game.m_windowInst.m_width / 2 - 50.0f,
+            sg_game.m_windowInst.m_height / 2,
+            "GAME OVER!"
+        );
+    }
+
+    Text::PrintText
+    (
+        15.0f, 15.0f,
+        "Elapsed Time: %f", sg_game.m_elapsedTime
+    );
+
+    glutSwapBuffers();
+
+    // Setup viewport for rendering camera
+    glViewport(0, 0, sg_game.m_windowInst.m_width, sg_game.m_windowInst.m_height);
+}
+
+void RenderCameraSystem::OnUpdate() noexcept
+{
     // Setup viewport for rendering camera
     glViewport(0, 0, sg_game.m_windowInst.m_width, sg_game.m_windowInst.m_height);
 
@@ -24,12 +52,4 @@ void RenderCameraSystem::OnUpdate() noexcept
     glOrtho(0, sg_game.m_windowInst.m_width, 0, sg_game.m_windowInst.m_height, -1, 1);
     glScalef(1, -1, 1);
     glTranslatef(0, -sg_game.m_windowInst.m_height, 0);
-
-    SendEventFrom<update>(this);
-
-    glutSwapBuffers();
 }
-
-//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-//glEnable(GL_BLEND);
-//glClearColor(0.0, 0.0, 0.0, 0.0);

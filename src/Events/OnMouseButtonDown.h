@@ -1,19 +1,19 @@
 /******************************************************************************
-filename:	TowerAttackAISpawner.h
+filename:	OnMouseButtonDown.h
 author:		Jolyn Wong Kaiyi, wong.k@digipen.edu
 Project:	CS396 Assignment 02
 
 Description:
 
-    Data relating to a spawner that spawns AI that attacks tower.
+    Defines an event that is published when a mouse button is down.
 
 ******************************************************************************/
 #pragma once
 
-struct TowerAttackAISpawner
+struct OnMouseButtonDown : xecs::event::instance<const unsigned char>
 {
-    constexpr static auto typedef_v = xecs::component::type::tag
+    constexpr static auto typedef_v = xecs::event::type::global
     {
-        .m_pName = "TowerAttackAISpawner"
+        .m_pName = "OnMouseButtonDown"
     };
 };

@@ -13,7 +13,7 @@ Description:
 struct RenderTurretSystem : xecs::system::instance
 {
     constexpr static auto typedef_v =
-    xecs::system::type::child_update<RenderCameraSystem, RenderCameraSystem::update>
+    xecs::system::type::child_update<RenderSystem, RenderSystem::update>
     {
         .m_pName = "RenderTurrentSystem"
     };

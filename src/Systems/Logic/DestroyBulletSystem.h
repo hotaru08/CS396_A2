@@ -17,10 +17,16 @@ struct DestroyBulletSystem : xecs::system::instance
         .m_pName = "DestroyBulletSystem"
     };
 
-    using query = std::tuple
-    <
-        xecs::query::must< Bullet >
-    >;
+    void OnGameStart() noexcept
+    {
+        m_bulletAndMeleeQuery.m_OneOf.AddFromComponents< Bullet, RenderMelee >();
+        m_enemyQuery.m_Must.AddFromComponents< TowerAI >();
+    }
 
-    void operator()(xecs::component::entity& _entity, const Position& _position, const Scale& _scale) noexcept;
+    //void operator()(xecs::component::entity& _entity, const Position& _position, const Scale& _scale) noexcept;
+
+    void OnUpdate() noexcept;
+
+    xecs::query::instance m_bulletAndMeleeQuery;
+    xecs::query::instance m_enemyQuery;
 };

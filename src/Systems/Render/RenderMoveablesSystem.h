@@ -13,7 +13,7 @@ Description:
 struct RenderMoveablesSystem : xecs::system::instance
 {
     constexpr static auto typedef_v =
-    xecs::system::type::child_update<RenderCameraSystem, RenderCameraSystem::update>
+    xecs::system::type::child_update<RenderSystem, RenderSystem::update>
     {
         .m_pName = "RenderMoveablesSystem"
     };
@@ -22,7 +22,6 @@ struct RenderMoveablesSystem : xecs::system::instance
     <
         xecs::query::one_of<Player>,
         xecs::query::one_of<Target>,
-
         xecs::query::none_of<Bullet>
     >;
 

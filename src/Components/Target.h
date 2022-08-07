@@ -26,8 +26,10 @@ struct Target
     xcore::vector2 m_value; //<! Target location that current entity is going for
 };
 
-property_begin(Target)
+struct Tower
 {
-    property_var(m_value)
-}
-property_end()
+    constexpr static auto typedef_v = xecs::component::type::tag
+    {
+        .m_pName = "Tower"
+    };
+};

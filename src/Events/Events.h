@@ -14,5 +14,8 @@ Description:
 #include <Events\OnKeyHold.h>
 #include <Events\OnKeyDown.h>
 
+#include <Events\OnMouseButtonDown.h>
+#include <Events\OnMouseMoved.h>
+
 #define ALL_EVENTS \
-    OnKeyUp, OnKeyHold, OnKeyDown
+    OnKeyUp, OnKeyHold, OnKeyDown, OnMouseButtonDown, OnMouseMoved

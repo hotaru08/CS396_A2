@@ -1,43 +1,35 @@
 /******************************************************************************
-filename:	Health.h
+filename:	MeleeAttack.h
 author:		Jolyn Wong Kaiyi, wong.k@digipen.edu
 Project:	CS396 Assignment 02
 
 Description:
 
-    Data regarding health.
+    Data regarding MeleeAttack
 
 ******************************************************************************/
 #pragma once
 
-struct Health
+struct MeleeAttack
 {
     constexpr static auto typedef_v = xecs::component::type::data
     {
-        .m_pName = "Health"
+        .m_pName = "MeleeAttack"
     };
 
     xcore::err Serialize(xecs::serializer::stream& TextFile, bool) noexcept
     {
         TextFile.Field("Value", m_value).clear();
-        return{};
+        return { };
     }
 
-    float m_value;
+    bool m_value;
 };
 
-struct HealthBar
+struct RenderMelee
 {
-    constexpr static auto typedef_v = xecs::component::type::data
+    constexpr static auto typedef_v = xecs::component::type::tag
     {
-        .m_pName = "HealthBar"
+        .m_pName = "RenderMelee"
     };
-
-    xcore::err Serialize(xecs::serializer::stream& TextFile, bool) noexcept
-    {
-        TextFile.Field("Value", m_value).clear();
-        return{};
-    }
-
-    xecs::component::entity m_value;
 };

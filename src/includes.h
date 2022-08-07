@@ -41,5 +41,10 @@ Description:
 #include <Misc\Game.h>
 
 #include <Systems\Logic\TurretShootingSystem.hpp>
+#include <Systems\Logic\MeleeAttackSystem.hpp>
 #include <Systems\Logic\DestroyBulletSystem.hpp>
+#include <Systems\Logic\CollisionSystems.hpp>
+#include <Systems\Logic\UpdateMovementSystem.hpp>
+#include <Systems\Logic\UpdateHealthSystem.hpp>
 #include <Systems\Render\RenderCameraSystem.hpp>
+#include <Systems\Creation\SpawnAISystem.hpp>

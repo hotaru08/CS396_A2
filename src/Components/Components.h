@@ -9,6 +9,7 @@
 #include <Components\Color.h>
 
 #include <Components\FireBullet.h>
+#include <Components\MeleeAttack.h>
 #include <Components\Bullet.h>
 #include <Components\Target.h>
 #include <Components\Health.h>
@@ -17,14 +18,13 @@
 #include <Components\Tags\TowerAI.h>
 #include <Components\Tags\PlayerAI.h>
 #include <Components\Tags\BomberAI.h>
-#include <Components\Tags\PlayerAttackAISpawner.h>
-#include <Components\Tags\TowerAttackAISpawner.h>
+#include <Components\Spawners.h>
+
 
 #define ALL_COMPONENTS \
     Position, Scale, Rotation,  \
     Velocity, Timer, GridCell,  \
-    FireBullet, Bullet, Target, Health, Color
+    FireBullet, Bullet, Target, Health, Color, Spawner, MeleeAttack
 
 #define ALL_TAGS \
-    Player, TowerAI, PlayerAI, BomberAI, \
-    PlayerAttackAISpawner, TowerAttackAISpawner
+    Player, TowerAI, PlayerAI, BomberAI, RenderMelee, HealthBar, Tower

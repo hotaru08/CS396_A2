@@ -46,12 +46,14 @@ int main(int argc, char** argv)
             {
                 sg_game.m_gameMgr->Run();
                 sg_game.m_windowInst.m_inputs.m_keys.Poll();
+
+                if (!sg_game.m_gameOver)
+                    sg_game.m_elapsedTime += Definitions::FIXED_DELTA_TIME;
             }
         );
         glutTimerFunc(0, RefreshUpdate, 0);
 
         // Poll for key and mouse inputs
-        glutIgnoreKeyRepeat(false);
         glutKeyboardFunc
         (
             [](unsigned char Key, int MouseX, int MouseY) noexcept
@@ -72,20 +74,36 @@ int main(int argc, char** argv)
         (
             [](int Button, int State, int MouseX, int MouseY) noexcept
             {
+                bool down = State == GLUT_DOWN;
+
                 if (Button == GLUT_LEFT_BUTTON)
-                    sg_game.m_windowInst.m_inputs.m_mouseLeftBtn = (State == GLUT_DOWN);
+                    sg_game.m_windowInst.m_inputs.m_mouseLeftBtn = down;
                 else if (Button == GLUT_RIGHT_BUTTON)
-                    sg_game.m_windowInst.m_inputs.m_mouseRightBtn = (State == GLUT_DOWN);
+                    sg_game.m_windowInst.m_inputs.m_mouseRightBtn = down;
+
+                if (down)
+                    sg_game.m_gameMgr->SendGlobalEvent< OnMouseButtonDown >(Button);
             }
         );
-        glutPassiveMotionFunc
-        (
-            [](const int _x, const int _y)
-            {
-                sg_game.m_windowInst.m_inputs.m_mouseX = _x;
-                sg_game.m_windowInst.m_inputs.m_mouseY = _y;
-            }
-        );
+
+        auto updateMouse =
+        [](const int _x, const int _y)
+        {
+            sg_game.m_windowInst.m_inputs.m_mouseX = _x;
+            sg_game.m_windowInst.m_inputs.m_mouseY = _y;
+
+            sg_game.m_gameMgr->SendGlobalEvent< OnMouseMoved >
+            (
+                xcore::vector2
+                {
+                    static_cast<float>(_x),
+                    static_cast<float>(_y)
+                }
+            );
+        };
+        glutMotionFunc(updateMouse);
+        glutPassiveMotionFunc(updateMouse);
+        glutSetCursor(GLUT_CURSOR_FULL_CROSSHAIR);
 
         glutMainLoop();
     }

@@ -23,9 +23,9 @@ struct TurretShootingSystem : xecs::system::instance
 
     void operator()(
         xecs::component::entity& _entity, FireBullet& _fireBullet,
-        Timer& _timer, Position& _turrentPos, Rotation& _turretRot);
+        Target* _target, Timer& _timer, Position& _turrentPos, Rotation& _turretRot);
 
 private:
-    static constexpr float m_shootInterval = 1.0f;
+    static constexpr float m_shootInterval = 0.5f;
     static constexpr float m_bulletSpeed   = 5.0f;
 };

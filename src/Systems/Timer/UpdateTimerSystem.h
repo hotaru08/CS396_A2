@@ -10,6 +10,7 @@ Description:
 ******************************************************************************/
 #pragma once
 
+// Updates Timer by counting down from a specified value
 struct UpdateTimerSystem : xecs::system::instance
 {
     constexpr static auto typedef_v = xecs::system::type::update
@@ -46,13 +47,20 @@ struct UpdateTimerSystem : xecs::system::instance
     xecs::query::instance m_timerQuery;
 };
 
+
+// Update Timer countdown for triggering being able to fire
 struct UpdateTimerShootingSystem : xecs::system::instance
 {
     constexpr static auto typedef_v =
     xecs::system::type::child_update<UpdateTimerSystem, UpdateTimerSystem::update>
     {
-        .m_pName = "ShootingSystem"
+        .m_pName = "UpdateTimerShootingSystem"
     };
+
+    using query = std::tuple
+    <
+        xecs::query::none_of< Player >
+    >;
 
     void operator()(Timer& _timer, FireBullet& _fireBullet) const noexcept
     {
@@ -60,6 +68,50 @@ struct UpdateTimerShootingSystem : xecs::system::instance
         {
             _timer.m_value = 0.0f;
             _fireBullet.m_value = true;
+        }
+    }
+};
+
+
+// Update Timer countdown for triggering the spawning of AI
+struct UpdateTimerSpawner : xecs::system::instance
+{
+    constexpr static auto typedef_v =
+    xecs::system::type::child_update<UpdateTimerSystem, UpdateTimerSystem::update>
+    {
+        .m_pName = "UpdateTimerSpawner"
+    };
+
+    void operator()(Timer& _timer, Spawner& _spawner) const noexcept
+    {
+        if (_timer.m_value <= 0.0f)
+        {
+            _timer.m_value = 0.0f;
+            _spawner.m_canSpawn = true;
+        }
+    }
+};
+
+
+// Update Timer countdown for rendering melee effect
+struct UpdateTimerMeleeAttack : xecs::system::instance
+{
+    constexpr static auto typedef_v =
+    xecs::system::type::child_update<UpdateTimerSystem, UpdateTimerSystem::update>
+    {
+        .m_pName = "UpdateTimerMeleeAttack"
+    };
+
+    using query = std::tuple
+    <
+        xecs::query::must< RenderMelee >
+    >;
+
+    void operator()(xecs::component::entity& _ent, Timer& _timer) const noexcept
+    {
+        if (_timer.m_value <= 0.0f)
+        {
+            DeleteEntity(_ent);
         }
     }
 };
